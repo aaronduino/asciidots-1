@@ -1,5 +1,5 @@
 #include "interpret.h"
 
 int main(){
-  interpret interp("../test/pipes.dots");
+  Interpret interpret("../test/pipes.dots");
 }

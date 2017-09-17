@@ -4,9 +4,9 @@
 
 using namespace std;
 
-class interpret{
+class Interpret{
 public:
-  interpret(string filename);
+  Interpret(string filename);
 private:
   string* circuit;
 

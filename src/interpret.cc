@@ -1,10 +1,10 @@
 #include "interpret.h"
 
-interpret::interpret(string filename){
+Interpret::Interpret(string filename){
   circuit = LoadCircuit(filename);
 }
 
-string* interpret::LoadCircuit(string filename){
+string* Interpret::LoadCircuit(string filename){
   // get circuit's dimensions
   uint width, height;
 
