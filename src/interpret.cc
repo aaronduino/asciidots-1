@@ -28,5 +28,7 @@ string* Interpret::LoadCircuit(string filename){
     circuit[i] = line + string(height - line.length(), ' '); // pad to width
   }
 
+  file.close();
+
   return circuit;
 }
