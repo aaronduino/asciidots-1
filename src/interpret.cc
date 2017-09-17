@@ -25,7 +25,7 @@ string* Interpret::LoadCircuit(string filename){
   for(int i = 0; i < height; i++){
     getline(file, line);
 
-    circuit[i] = line + string(height - line.length(), ' '); // pad to width
+    circuit[i] = line + string(width - line.length(), ' '); // pad to width
   }
 
   file.close();
