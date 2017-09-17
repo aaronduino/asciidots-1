@@ -6,7 +6,7 @@ Interpret::Interpret(string filename){
 
 string* Interpret::LoadCircuit(string filename){
   // get circuit's dimensions
-  uint width, height;
+  uint width, height = 0;
 
   string line;
   ifstream file(filename);
