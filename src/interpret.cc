@@ -1,4 +1,5 @@
 #include "interpret.h"
+#include "circuittools.h"
 
 using namespace std;
 
