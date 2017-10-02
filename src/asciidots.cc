@@ -1,5 +1,5 @@
 #include "interpret.h"
 
-int main(){
-  Interpret interpret("../test/pipes.dots");
+int main(int argc, char* argv[]){
+  Interpret interpret(argv[1]);
 }
