@@ -2,13 +2,12 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
-
 class Interpret{
 public:
-  Interpret(string filename);
-private:
-  string* circuit;
+  Interpret(std::string filename);
 
-  string* LoadCircuit(string filename);
+private:
+  std::string* circuit;
+
+  std::string* LoadCircuit(std::string filename);
 };

@@ -1,5 +1,7 @@
 #include "interpret.h"
 
+using namespace std;
+
 Interpret::Interpret(string filename){
   circuit = LoadCircuit(filename);
 }
