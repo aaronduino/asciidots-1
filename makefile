@@ -5,6 +5,7 @@ EXE = dots
 SOURCES := $(shell find src/ -name '*.cc')
 OBJECTS := $(subst src/,obj/,$(SOURCES:%.cc=%.o))
 
+.PHONY: asciidots clean rebuild
 # link all objects when we have newest deps
 asciidots: $(OBJECTS)
 		$(CC) $(OBJECTS) -o bin/$(EXE)
@@ -14,3 +15,5 @@ obj/%.o: src/%.cc
 # remove old object files
 clean:
 		rm -rf obj/* bin/*
+#clean and build
+rebuild: clean asciidots
