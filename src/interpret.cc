@@ -5,6 +5,9 @@ using namespace std;
 
 Interpret::Interpret(string filename){
   circuit = LoadCircuit(filename);
+
+  CircuitTools circuitTools(circuit);
+  cout << circuitTools.FindEscapes(Point{ 2, 0 }).size() << "\n";
 }
 
 string* Interpret::LoadCircuit(string filename){
@@ -24,10 +27,11 @@ string* Interpret::LoadCircuit(string filename){
   // pull lines to memory
   string* circuit = new string[height];
 
-  file.seekg(0); // reset reader
+  file.clear();
+  file.seekg(0, file.beg); // reset reader
+  
   for(int i = 0; i < height; i++){
     getline(file, line);
-
     circuit[i] = line + string(width - line.length(), ' '); // pad to width
   }
 
