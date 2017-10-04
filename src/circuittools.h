@@ -20,7 +20,6 @@ public:
 
     this->width = circuit[0].size();
     this->height = circuit->size();
-    std::cout << width << ", " << height << "\n";
   }
 
   // check point inside circuit
