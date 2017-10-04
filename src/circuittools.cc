@@ -1,6 +1,8 @@
 #include "circuittools.h"
 #include "tiletools.h"
 
+using namespace std;
+
 bool CircuitTools::WithinBounds(Point p) // point inside circuit?
 {
   if(p.x < 0 || p.x >= width)
@@ -13,12 +15,12 @@ bool CircuitTools::WithinBounds(Point p) // point inside circuit?
 
 // returns direction vectors a dot can point for a valid exit from tile at p
 // verbose, I know
-std::vector<Point> CircuitTools::FindEscapes(Point p)
+vector<Point> CircuitTools::FindEscapes(Point p)
 {
   int map[] = { 0, 3, 1, 2 }; // maps vecDir order to clockDir values
   int order = 0; // easier to map order than value to a clockDir
 
-  std::vector<Point> out;
+  vector<Point> out;
 
   for(int y = -1; y <= 1; y++) for(int x = -1; x <= 1; x++)
   {
