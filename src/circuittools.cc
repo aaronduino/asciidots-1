@@ -18,7 +18,8 @@ bool CircuitTools::WithinBounds(Point p) // point inside circuit?
 vector<Point> CircuitTools::FindEscapes(Point p)
 {
   int map[] = { 0, 3, 1, 2 }; // maps vecDir order to clockDir values
-  int order = 0; // easier to map order than value to a clockDir
+  // easier to map order than value to a clockDir
+  int order = -1; // -1 since we tick BEFORE operations
 
   vector<Point> out;
 
@@ -28,16 +29,17 @@ vector<Point> CircuitTools::FindEscapes(Point p)
     Point q = p + o; // offset p by o
 
     // escapes
-    if(!WithinBounds(q))
-      continue; // certainly not
 
     if(!( (x == 0) ^ (y == 0) ))
       continue; // ONE and ONLY ONE offset must be 0
 
+    order++; // next vector to be used
+
+    if(!WithinBounds(q))
+      continue; // certainly not
+
     if(TileTools::ValidEntry(circuit[q.y][q.x], map[order]))
       out.push_back(o); // valid vector, push to output
-
-    order++; // next vector to be used
   }
 
   return out;
