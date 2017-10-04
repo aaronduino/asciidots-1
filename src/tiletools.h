@@ -29,7 +29,7 @@ namespace TileTools
     {
       int filter = tileDirs[tile];
       int sd = 1 << direction; // shift 1 to align with filter
-      return (sd && filter) == sd; // sd passes through filter intact?
+      return (sd & filter) == sd; // sd passes through filter intact?
     }
   }
 }
