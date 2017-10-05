@@ -6,6 +6,7 @@ public:
   Point position;
 
   Dot(Point position, int direction);
+  Dot(Point position, Point vDir); // accept init with vector
 
   int GetDirection() { return direction; }
 

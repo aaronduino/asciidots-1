@@ -4,6 +4,10 @@ Dot::Dot(Point position, int direction){
   this->position = position;
   this->PointTo(direction);
 }
+Dot::Dot(Point position, Point vDir){
+  this->position = position;
+  this->PointTo(vDir);
+}
 
 void Dot::PointTo(int direction){
   this->direction = direction & 3; // normalise 0->3
