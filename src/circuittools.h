@@ -27,8 +27,7 @@ namespace CircuitTools{
 
     std::vector<Point> out;
 
-    for(int y = -1; y <= 1; y++) for(int x = -1; x <= 1; x++)
-    {
+    for(int y = -1; y <= 1; y++) for(int x = -1; x <= 1; x++){
       Point o { x, y }; // offset
       Point q = p + o; // offset p by o
 

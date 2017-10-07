@@ -40,13 +40,11 @@ string* Interpret::LoadCircuit(string filename){
 }
 
 // find spawns, return prepared dots. obviously load circuit first
-vector<Dot> Interpret::SpawnDots()
-{
+vector<Dot> Interpret::SpawnDots(){
   vector<Dot> out;
 
   // look for spawn chars in circuit
-  for(int y = 0; y < height; y++) for(int x = 0; x < width; x++)
-  {
+  for(int y = 0; y < height; y++) for(int x = 0; x < width; x++){
     char tile  = circuit[y][x];
 
     if(tile != '.') // not what we're looking for
@@ -57,8 +55,7 @@ vector<Dot> Interpret::SpawnDots()
     Point p { x, y };
     vector<Point> escapes = CircuitTools::FindEscapes(p, circuit);
 
-    switch(escapes.size())
-    {
+    switch(escapes.size()){
       case 0:
         // spawned dot is doomed TODO: log warn about dead spawn
         break;
