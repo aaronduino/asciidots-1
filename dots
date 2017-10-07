@@ -1,6 +1,19 @@
-tput smcup # switch to alternate screen
-clear
+DOT=$1
 
-bin/dots $1 # pass (hopefully) the path
+run()
+{
+  tput smcup # switch to alternate screen
+  clear
 
-tput rmcup # back to normal screen
+  bin/dots $1
+
+  tput rmcup # back to normal screen
+}
+
+if [ -e "$DOT" ] && [ ! -z "$DOT" ] # test the path
+then
+  run "$DOT"
+else
+  echo "do -h"
+  # tell them to do -h
+fi
