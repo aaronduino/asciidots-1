@@ -1,0 +1,6 @@
+tput smcup # switch to alternate screen
+clear
+
+bin/dots $1 # pass (hopefully) the path
+
+tput rmcup # back to normal screen
