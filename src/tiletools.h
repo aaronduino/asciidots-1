@@ -4,7 +4,7 @@
 
 namespace TileTools{
   // can a dot enter this tile in this direction
-  bool ValidEntry(char tile, int direction){}
+  bool ValidEntry(char tile, int direction){
     /* defines the directions a dot can point in while entering a tile
     * from least to most significant, each bit represents up, right, left, down
     * NOTE: direction dot may point to enter, NOT the side they enter from
