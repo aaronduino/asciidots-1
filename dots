@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DOT=$1 # path to .dots file
 
 run()
@@ -10,7 +12,7 @@ run()
 
 help()
 {
-  echo "kqo's asciidots interpreter
+  echo "kqo's asciidots interpreter:
 Usage: dots [options] path-to-circuit"
 }
 
@@ -20,7 +22,7 @@ then
 else # path given won't work
   if [ ! -z "$DOT" ] # did they try to give a path
   then
-    echo "path \"${DOT}\" not found."
+    echo "File \"${DOT}\" not found."
   fi
   help
 fi
