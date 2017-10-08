@@ -11,8 +11,8 @@ public:
 
 private:
   uint width, height; // circuit dimensions
-  std::string* circuit;
+  std::vector<std::string> circuit;
 
-  std::string* LoadCircuit(std::string filename);
+  std::vector<std::string> LoadCircuit(std::string filename);
   std::vector<Dot> SpawnDots();
 };

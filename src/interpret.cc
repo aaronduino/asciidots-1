@@ -6,10 +6,9 @@ using namespace std;
 Interpret::Interpret(string filename){
   circuit = LoadCircuit(filename);
 
-  cout << SpawnDots().size() << "\n";
 }
 
-string* Interpret::LoadCircuit(string filename){
+vector<string> Interpret::LoadCircuit(string filename){
   // get circuit's dimensions
   width = height = 0;
 
@@ -24,19 +23,19 @@ string* Interpret::LoadCircuit(string filename){
   }
 
   // pull lines to memory
-  string* circuit = new string[height];
+  vector<string> out(height);
 
   file.clear();
   file.seekg(0, file.beg); // reset reader
 
   for(int i = 0; i < height; i++){
     getline(file, line);
-    circuit[i] = line + string(width - line.length(), ' '); // pad to width
+    out[i] = line + string(width - line.length(), ' '); // pad to width
   }
 
   file.close();
 
-  return circuit;
+  return out;
 }
 
 // find spawns, return prepared dots. obviously load circuit first

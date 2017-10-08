@@ -7,9 +7,9 @@
 
 namespace CircuitTools{
   // check point inside circuit
-  bool WithinBounds(Point p, std::string circuit[]){
-    int width = circuit[0].size();
-    int height = circuit->size();
+  bool WithinBounds(Point p, std::vector<std::string> circuit){
+    int width = circuit[0].length();
+    int height = circuit.size();
 
     if(p.x < 0 || p.x >= width)
       return false;
@@ -20,7 +20,7 @@ namespace CircuitTools{
   }
 
   // where can a dot escape to from point p in circuit
-  std::vector<Point> FindEscapes(Point p, std::string circuit[]){
+  std::vector<Point> FindEscapes(Point p, std::vector<std::string> circuit){
     int map[] = { 0, 3, 1, 2 }; // maps vecDir order to clockDir values
     // easier to map order than value to a clockDir
     int order = -1; // -1 since we tick BEFORE operations
