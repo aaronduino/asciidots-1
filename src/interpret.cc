@@ -1,11 +1,13 @@
 #include "interpret.h"
 #include "circuittools.h"
+#include "debug.h"
 
 using namespace std;
 
 Interpret::Interpret(string filename){
   circuit = LoadCircuit(filename);
 
+  Debug debug(circuit);
 }
 
 vector<string> Interpret::LoadCircuit(string filename){
