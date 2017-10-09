@@ -8,7 +8,7 @@ OBJECTS := $(subst src/,obj/,$(SOURCES:%.cc=%.o))
 .PHONY: asciidots clean rebuild
 # link all objects when we have newest deps
 asciidots: $(OBJECTS)
-		$(CC) $(OBJECTS) -o bin/$(EXE)
+		$(CC) $(OBJECTS) -o bin/$(EXE) -lncurses
 # object required, compile twinned source
 obj/%.o: src/%.cc
 		$(CC) -c $< -o $@
