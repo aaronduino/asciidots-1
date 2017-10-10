@@ -1,12 +1,14 @@
 #include "dot.h"
 
-Dot::Dot(Point position, int direction){
+Dot::Dot(Point position, int direction, int ID){
   this->position = position;
   this->PointTo(direction);
+  this->ID = ID;
 }
-Dot::Dot(Point position, Point vDir){
+Dot::Dot(Point position, Point vDir, int ID){
   this->position = position;
   this->PointTo(vDir);
+  this->ID = ID;
 }
 
 void Dot::PointTo(int direction){
