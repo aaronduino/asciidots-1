@@ -11,6 +11,8 @@ public:
 
 private:
   uint width, height; // circuit dimensions
+  int dotCounter = 0; // counts IDs
+
   std::vector<std::string> circuit;
 
   std::vector<std::string> LoadCircuit(std::string filename);

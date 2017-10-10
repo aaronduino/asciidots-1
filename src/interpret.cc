@@ -62,7 +62,8 @@ vector<Dot> Interpret::SpawnDots(){
         break;
       case 1:{
         // unambiguous exit, spawn dot
-        Dot dot(p, escapes[0]);
+        Dot dot(p, escapes[0], dotCounter);
+        dotCounter++;
         out.push_back(dot);
 
         break;
