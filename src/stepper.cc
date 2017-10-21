@@ -1,5 +1,6 @@
 #include "stepper.h"
 #include "circuittools.h"
+#include "tiletools.h"
 #include "point.h"
 
 using namespace std;
@@ -26,7 +27,7 @@ void Stepper::Step(){
     Point pos = dots[i].position;
     int dir = dots[i].GetDirection();
 
-    if(!CircuitTools::WithinBounds(pos, circuit)){
+    if(!WithinBounds(pos, circuit)){
       dots[i].deathMarked = true;
       continue;
     }
@@ -34,7 +35,7 @@ void Stepper::Step(){
     char tile = circuit[pos.y][pos.x];
 
     // should we not have entered this tile this way? die
-    if(!TileTools::ValidEntry(tile, dir)){
+    if(!ValidEntry(tile, dir)){
       dots[i].deathMarked = true;
       continue;
     }

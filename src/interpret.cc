@@ -54,7 +54,7 @@ vector<Dot> Interpret::SpawnDots(){
     // didn't esc, this could be a spawn
 
     Point p { x, y };
-    vector<Point> escapes = CircuitTools::FindEscapes(p, circuit);
+    vector<Point> escapes = FindEscapes(p, circuit);
 
     switch(escapes.size()){
       case 0:
