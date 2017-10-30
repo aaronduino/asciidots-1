@@ -1,13 +1,25 @@
+#include <chrono>
+#include <thread>
 #include "interpret.h"
 #include "circuittools.h"
 #include "debug.h"
+#include "stepper.h"
 
 using namespace std;
 
 Interpret::Interpret(string filename){
   circuit = LoadCircuit(filename);
 
+  vector<Dot> dots = SpawnDots();
+
   Debug debug(circuit);
+  Stepper stepper(circuit);
+
+  while(true){
+    stepper.Step(&dots);
+    debug.DrawDots(dots);
+    this_thread::sleep_for(chrono::milliseconds(100));
+  }
 }
 
 vector<string> Interpret::LoadCircuit(string filename){
