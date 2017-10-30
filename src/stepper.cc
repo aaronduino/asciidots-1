@@ -5,30 +5,31 @@
 
 using namespace std;
 
-Stepper::Stepper(vector<string> circuit, vector<Dot> dots){
+Stepper::Stepper(vector<string> circuit){
   this->circuit = circuit;
-  this->dots = dots;
 }
 
-void Stepper::Step(){
+void Stepper::Step(vector<Dot> *dots){
+  vector<Dot> &dotsR = *dots;
+
   // do all dots once every tick
-  for(int i = 0; i < dots.size(); i++){
+  for(int i = 0; i < dotsR.size(); i++){
 
     // kill before sentancing more
-    if(dots[i].deathMarked){
-      dots.erase(dots.begin()+i); // remove i-th element
+    if(dotsR[i].deathMarked){
+      dotsR.erase(dotsR.begin()+i); // remove i-th element
       i--; // since removing an element shifts all back by one
       continue; // dot's dead, next
     }
 
-    dots[i].Move();
+    dotsR[i].Move();
 
     // for convenience
-    Point pos = dots[i].position;
-    int dir = dots[i].GetDirection();
+    Point pos = dotsR[i].position;
+    int dir = dotsR[i].GetDirection();
 
     if(!WithinBounds(pos, circuit)){
-      dots[i].deathMarked = true;
+      dotsR[i].deathMarked = true;
       continue;
     }
 
@@ -36,7 +37,7 @@ void Stepper::Step(){
 
     // should we not have entered this tile this way? die
     if(!ValidEntry(tile, dir)){
-      dots[i].deathMarked = true;
+      dotsR[i].deathMarked = true;
       continue;
     }
   }
