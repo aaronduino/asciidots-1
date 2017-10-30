@@ -16,9 +16,9 @@ Interpret::Interpret(string filename){
   Stepper stepper(circuit);
 
   while(true){
+    this_thread::sleep_for(chrono::milliseconds(500));
     stepper.Step(&dots);
     debug.DrawDots(dots);
-    this_thread::sleep_for(chrono::milliseconds(100));
   }
 }
 
