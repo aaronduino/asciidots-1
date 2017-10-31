@@ -20,7 +20,8 @@ void Stepper::Step(vector<Dot> *dots){
     // for convenience
     Point pos = dotsR[i].position;
     int dir = dotsR[i].GetDirection();
-
+    bool hor = dotsR[i].IsHorizontal();
+    bool ver = !hor;
     char tile = circuit[pos.y][pos.x];
 
     if(!WithinBounds(pos, circuit) || !ValidEntry(tile, dir)){
@@ -29,18 +30,41 @@ void Stepper::Step(vector<Dot> *dots){
       continue; // dot's dead, next
     }
 
+
     switch(tile){
+
       case '\\':
-        if(dotsR[i].IsHorizontal())
+        if(hor)
           dotsR[i].Turn(1);
         else
           dotsR[i].Turn(-1);
         break;
+
       case '/':
-        if(dotsR[i].IsVertical())
+        if(ver)
           dotsR[i].Turn(1);
         else
           dotsR[i].Turn(-1);
+        break;
+
+      case '<':
+        if(ver)
+          dotsR[i].PointTo(3);
+        break;
+
+      case '>':
+        if(ver)
+          dotsR[i].PointTo(1);
+        break;
+
+      case '^':
+        if(hor)
+          dotsR[i].PointTo(0);
+        break;
+
+      case 'v':
+        if(hor)
+          dotsR[i].PointTo(2);
         break;
     }
   }
