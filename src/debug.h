@@ -13,7 +13,6 @@ public:
 
 private:
   std::vector<std::string> circuit;
-  std::vector<std::vector<int>> colourMap; // stores tile colour codes
   std::vector<Dot> prevDots; // state of the last call's dots
 
   void DrawCircuit(); // draws the uncoloured base
