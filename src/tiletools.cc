@@ -12,8 +12,8 @@ bool ValidEntry(char tile, int direction){
   map<char, short> tileDirs{
     { '-', 0b1010 }, // horizontal
     { '|', 0b0101 }, // vertical
-    { ')', 0b0010 }, // right
-    { '(', 0b1000 }, // left
+    //{ ')', 0b0010 }, // right
+    //{ '(', 0b1000 }, // left
     { ' ', 0b0000 }  // space doesn't like anyone
   };
 

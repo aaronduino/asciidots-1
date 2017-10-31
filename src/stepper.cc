@@ -26,7 +26,7 @@ void Stepper::Step(vector<Dot> *dots){
 
     if(!WithinBounds(pos, circuit) ||
        !ValidEntry(circuit[pos.y][pos.x], dir)){
-         
+
       dotsR.erase(dotsR.begin()+i); // remove i-th element
       i--; // since removing an element shifts all back by one
       continue; // dot's dead, next
@@ -65,6 +65,15 @@ void Stepper::Step(vector<Dot> *dots){
       case 'v':
         if(hor)
           dotsR[i].PointTo(2);
+        break;
+
+      case '(':
+        if(hor)
+          dotsR[i].PointTo(1);
+        break;
+      case ')':
+        if(hor)
+          dotsR[i].PointTo(3);
         break;
 
       case '*':
