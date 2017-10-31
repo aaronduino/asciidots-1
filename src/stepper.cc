@@ -15,30 +15,33 @@ void Stepper::Step(vector<Dot> *dots){
   // do all dots once every tick
   for(int i = 0; i < dotsR.size(); i++){
 
-    // kill before sentancing more
-    if(dotsR[i].deathMarked){
-      dotsR.erase(dotsR.begin()+i); // remove i-th element
-      i--; // since removing an element shifts all back by one
-      continue; // dot's dead, next
-    }
-
     dotsR[i].Move();
 
     // for convenience
     Point pos = dotsR[i].position;
     int dir = dotsR[i].GetDirection();
 
-    if(!WithinBounds(pos, circuit)){
-      dotsR[i].deathMarked = true;
-      continue;
-    }
-
     char tile = circuit[pos.y][pos.x];
 
-    // should we not have entered this tile this way? die
-    if(!ValidEntry(tile, dir)){
-      dotsR[i].deathMarked = true;
-      continue;
+    if(!WithinBounds(pos, circuit) || !ValidEntry(tile, dir)){
+      dotsR.erase(dotsR.begin()+i); // remove i-th element
+      i--; // since removing an element shifts all back by one
+      continue; // dot's dead, next
+    }
+
+    switch(tile){
+      case '\\':
+        if(dotsR[i].IsHorizontal())
+          dotsR[i].Turn(1);
+        else
+          dotsR[i].Turn(-1);
+        break;
+      case '/':
+        if(dotsR[i].IsVertical())
+          dotsR[i].Turn(1);
+        else
+          dotsR[i].Turn(-1);
+        break;
     }
   }
 }

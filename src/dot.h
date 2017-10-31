@@ -6,8 +6,6 @@ public:
   Point position;
   int ID; // unique ID, dot doesn't worry if it's unique, its creator does
 
-  bool deathMarked = false;
-
   Dot(Point position, int direction, int ID);
   Dot(Point position, Point vDir, int ID); // accept init with vector
 
