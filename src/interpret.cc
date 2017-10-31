@@ -15,6 +15,8 @@ Interpret::Interpret(string filename){
   Debug debug(circuit);
   Stepper stepper(circuit);
 
+  debug.DrawDots(dots);
+
   while(true){
     this_thread::sleep_for(chrono::milliseconds(500));
     stepper.Step(&dots);
