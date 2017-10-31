@@ -9,9 +9,9 @@ bool WithinBounds(Point p, vector<string> circuit){
   int height = circuit.size();
 
   if(p.x < 0 || p.x >= width)
-  return false;
+    return false;
   if(p.y < 0 || p.y >= height)
-  return false;
+    return false;
 
   return true;
 }

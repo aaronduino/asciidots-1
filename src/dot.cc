@@ -1,14 +1,12 @@
 #include "dot.h"
 
-Dot::Dot(Point position, int direction, int ID){
+Dot::Dot(Point position, int direction){
   this->position = position;
   this->PointTo(direction);
-  this->ID = ID;
 }
-Dot::Dot(Point position, Point vDir, int ID){
+Dot::Dot(Point position, Point vDir){
   this->position = position;
   this->PointTo(vDir);
-  this->ID = ID;
 }
 
 void Dot::PointTo(int direction){
@@ -51,4 +49,10 @@ void Dot::PointTo(Point vDir){
 
 void Dot::Turn(int turns){ // clockwise quarter turns
   this->PointTo(direction + turns);
+}
+
+Dot Dot::Clone(int newDir){
+  Dot* clone = new Dot(position, newDir);
+
+  return *clone;
 }

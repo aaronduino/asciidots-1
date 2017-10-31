@@ -18,7 +18,7 @@ Interpret::Interpret(string filename){
   debug.DrawDots(dots);
 
   while(true){
-    this_thread::sleep_for(chrono::milliseconds(500));
+    this_thread::sleep_for(chrono::milliseconds(250));
     stepper.Step(&dots);
     debug.DrawDots(dots);
   }
@@ -76,8 +76,7 @@ vector<Dot> Interpret::SpawnDots(){
         break;
       case 1:{
         // unambiguous exit, spawn dot
-        Dot dot(p, escapes[0], dotCounter);
-        dotCounter++;
+        Dot dot(p, escapes[0]);
         out.push_back(dot);
 
         break;

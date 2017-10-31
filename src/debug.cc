@@ -16,9 +16,8 @@ Debug::Debug(vector<string> circuit){
 
 // colour tiles containing dots
 void Debug::DrawDots(vector<Dot> dots){
-  Point pos;
   for(int i = 0; i < prevDots.size(); i++){
-    pos = prevDots[i].position;
+    Point pos = prevDots[i].position;
 
     move(pos.y, pos.x);
     addch(circuit[pos.y][pos.x]);
@@ -27,7 +26,7 @@ void Debug::DrawDots(vector<Dot> dots){
 
   // colour this tick's dots
   for(int i = 0; i < dots.size(); i++){
-    pos = dots[i].position; // convenience
+    Point pos = dots[i].position; // convenience
 
     attron(COLOR_PAIR(1));
     move(pos.y, pos.x);

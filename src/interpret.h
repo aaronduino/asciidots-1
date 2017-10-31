@@ -10,8 +10,6 @@ public:
   Interpret(std::string filename);
 
 private:
-  int dotCounter = 0; // counts IDs
-
   int width, height; // circuit dimensions
   std::vector<std::string> circuit;
 

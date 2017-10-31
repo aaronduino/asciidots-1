@@ -4,10 +4,9 @@
 class Dot{
 public:
   Point position;
-  int ID; // unique ID, dot doesn't worry if it's unique, its creator does
 
-  Dot(Point position, int direction, int ID);
-  Dot(Point position, Point vDir, int ID); // accept init with vector
+  Dot(Point position, int direction);
+  Dot(Point position, Point vDir); // accept init with vector
 
   int GetDirection() { return direction; } // prevents setting dir over/under
 
@@ -19,6 +18,8 @@ public:
 
   bool IsHorizontal() { return (this->direction & 1) == 1; } // odd clock
   bool IsVertical() { return (this->direction & 1) == 0; } // even clock
+
+  Dot Clone(int newDir); // give a similar dot pointing in a given dir
 
 private:
   int direction; // clock direction (0 up, 1 right, 2 down, 3 left)
