@@ -11,7 +11,8 @@ Stepper::Stepper(vector<string> circuit){
 
 void Stepper::Step(vector<Dot> *dots){
   vector<Dot> &dotsR = *dots;
-  vector<Dot> cloneBuffer; // ensures clones don't step this tick
+
+  cloneBuffer.clear();
 
   // do all dots once every tick
   for(int i = 0; i < dotsR.size(); i++){
@@ -21,8 +22,6 @@ void Stepper::Step(vector<Dot> *dots){
     // for convenience
     Point pos = dotsR[i].position;
     int dir = dotsR[i].GetDirection();
-    bool hor = dotsR[i].IsHorizontal();
-    bool ver = !hor;
 
     if(!WithinBounds(pos, circuit) ||
        !ValidEntry(circuit[pos.y][pos.x], dir)){
@@ -35,60 +34,47 @@ void Stepper::Step(vector<Dot> *dots){
     // do after bounds check to avoid out of bounds crash
     char tile = circuit[pos.y][pos.x];
 
-    switch(tile){
-
-      case '\\':
-        if(hor)
-          dotsR[i].Turn(1);
-        else
-          dotsR[i].Turn(-1);
-        break;
-      case '/':
-        if(ver)
-          dotsR[i].Turn(1);
-        else
-          dotsR[i].Turn(-1);
-        break;
-
-      case '<':
-        if(ver)
-          dotsR[i].PointTo(3);
-        break;
-      case '>':
-        if(ver)
-          dotsR[i].PointTo(1);
-        break;
-      case '^':
-        if(hor)
-          dotsR[i].PointTo(0);
-        break;
-      case 'v':
-        if(hor)
-          dotsR[i].PointTo(2);
-        break;
-
-      case '(':
-        if(hor)
-          dotsR[i].PointTo(1);
-        break;
-      case ')':
-        if(hor)
-          dotsR[i].PointTo(3);
-        break;
-
-      case '*':
-        if(hor){
-          cloneBuffer.push_back(dotsR[i].Clone(0));
-          cloneBuffer.push_back(dotsR[i].Clone(2));
-        }
-        else{
-          cloneBuffer.push_back(dotsR[i].Clone(1));
-          cloneBuffer.push_back(dotsR[i].Clone(3));
-        }
-        break;
-    }
+    FlowCheck(&dotsR[i], tile);
+    CloneCheck(&dotsR[i], tile);
   }
 
   // add the clone buffer to the dot list
   dotsR.insert(dotsR.end(), cloneBuffer.begin(), cloneBuffer.end());
+}
+
+void Stepper::FlowCheck(Dot *dot, char tile){
+  bool hor = dot->IsHorizontal();
+
+  // various direction changing tiles
+  if(tile=='\\' || tile=='/'){
+    int turn = 1;
+    if(hor) turn *= -1;
+    if(tile=='\\') turn *= -1;
+
+    dot->Turn(turn);
+  }
+  else if(tile=='^' || tile=='>' || tile=='v' || tile=='<'){
+    int dir = 0;
+
+    if(tile=='>') dir = 1;
+    else if(tile=='v') dir = 2;
+    else if(tile = '<') dir = 3;
+
+    dot->PointTo(dir);
+  }
+  else if(tile=='(')
+    dot->PointTo(1);
+  else if(tile==')')
+    dot->PointTo(3);
+}
+
+void Stepper::CloneCheck(Dot *dot, char tile){
+  if(tile != '*')
+    return;
+    
+  int rot = 0;
+  if(dot->IsVertical()) rot++;
+
+  cloneBuffer.push_back(dot->Clone(rot));
+  cloneBuffer.push_back(dot->Clone(rot+2));
 }
