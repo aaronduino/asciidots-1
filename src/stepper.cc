@@ -9,24 +9,22 @@ Stepper::Stepper(vector<string> circuit){
   this->circuit = circuit;
 }
 
-void Stepper::Step(vector<Dot> *dots){
-  vector<Dot> &dotsR = *dots;
-
+void Stepper::Step(vector<Dot> &dots){
   cloneBuffer.clear();
 
   // do all dots once every tick
-  for(int i = 0; i < dotsR.size(); i++){
+  for(int i = 0; i < dots.size(); i++){
 
-    dotsR[i].Move();
+    dots[i].Move();
 
     // for convenience
-    Point pos = dotsR[i].position;
-    int dir = dotsR[i].GetDirection();
+    Point pos = dots[i].position;
+    int dir = dots[i].GetDirection();
 
     if(!WithinBounds(pos, circuit) ||
        !ValidEntry(circuit[pos.y][pos.x], dir)){
 
-      dotsR.erase(dotsR.begin()+i); // remove i-th element
+      dots.erase(dots.begin()+i); // remove i-th element
       i--; // since removing an element shifts all back by one
       continue; // dot's dead, next
     }
@@ -34,16 +32,16 @@ void Stepper::Step(vector<Dot> *dots){
     // do after bounds check to avoid out of bounds crash
     char tile = circuit[pos.y][pos.x];
 
-    FlowCheck(&dotsR[i], tile);
-    CloneCheck(&dotsR[i], tile);
+    FlowCheck(dots[i], tile);
+    CloneCheck(dots[i], tile);
   }
 
   // add the clone buffer to the dot list
-  dotsR.insert(dotsR.end(), cloneBuffer.begin(), cloneBuffer.end());
+  dots.insert(dots.end(), cloneBuffer.begin(), cloneBuffer.end());
 }
 
-void Stepper::FlowCheck(Dot *dot, char tile){
-  bool hor = dot->IsHorizontal();
+void Stepper::FlowCheck(Dot &dot, char tile){
+  bool hor = dot.IsHorizontal();
 
   // various direction changing tiles
   if(tile=='\\' || tile=='/'){
@@ -51,7 +49,7 @@ void Stepper::FlowCheck(Dot *dot, char tile){
     if(hor) turn *= -1;
     if(tile=='\\') turn *= -1;
 
-    dot->Turn(turn);
+    dot.Turn(turn);
   }
   else if(tile=='^' || tile=='>' || tile=='v' || tile=='<'){
     int dir = 0;
@@ -60,21 +58,21 @@ void Stepper::FlowCheck(Dot *dot, char tile){
     else if(tile=='v') dir = 2;
     else if(tile = '<') dir = 3;
 
-    dot->PointTo(dir);
+    dot.PointTo(dir);
   }
   else if(tile=='(')
-    dot->PointTo(1);
+    dot.PointTo(1);
   else if(tile==')')
-    dot->PointTo(3);
+    dot.PointTo(3);
 }
 
-void Stepper::CloneCheck(Dot *dot, char tile){
+void Stepper::CloneCheck(Dot dot, char tile){
   if(tile != '*')
     return;
-    
-  int rot = 0;
-  if(dot->IsVertical()) rot++;
 
-  cloneBuffer.push_back(dot->Clone(rot));
-  cloneBuffer.push_back(dot->Clone(rot+2));
+  int rot = 0;
+  if(dot.IsVertical()) rot++;
+
+  cloneBuffer.push_back(dot.Clone(rot));
+  cloneBuffer.push_back(dot.Clone(rot+2));
 }

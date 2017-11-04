@@ -19,7 +19,7 @@ Interpret::Interpret(string filename){
 
   while(true){
     this_thread::sleep_for(chrono::milliseconds(250));
-    stepper.Step(&dots);
+    stepper.Step(dots);
     debug.DrawDots(dots);
   }
 }
