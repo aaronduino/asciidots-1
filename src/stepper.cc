@@ -56,7 +56,7 @@ void Stepper::FlowCheck(Dot &dot, char tile){
 
     if(tile=='>') dir = 1;
     else if(tile=='v') dir = 2;
-    else if(tile = '<') dir = 3;
+    else if(tile=='<') dir = 3;
 
     dot.PointTo(dir);
   }
