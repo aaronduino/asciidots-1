@@ -5,8 +5,9 @@
 
 using namespace std;
 
-Stepper::Stepper(vector<string> circuit){
+Stepper::Stepper(vector<string> circuit, vector<Operator> ops){
   this->circuit = circuit;
+  this->ops = ops;
 }
 
 void Stepper::Step(vector<Dot> &dots){
@@ -15,25 +16,43 @@ void Stepper::Step(vector<Dot> &dots){
   // do all dots once every tick
   for(int i = 0; i < dots.size(); i++){
 
+    if(!dots[i].enabled || dots[i].deathMarked)
+      continue; // this dot shouldn't be updating
+
     dots[i].Move();
 
     // for convenience
     Point pos = dots[i].position;
     int dir = dots[i].GetDirection();
 
-    if(!WithinBounds(pos, circuit) ||
-       !ValidEntry(circuit[pos.y][pos.x], dir)){
+    // is this dot now in a deathly situation?
 
-      dots.erase(dots.begin()+i); // remove i-th element
-      i--; // since removing an element shifts all back by one
-      continue; // dot's dead, next
+    if(!WithinBounds(pos, circuit)){
+      dots[i].deathMarked = true;
+      continue;
     }
 
     // do after bounds check to avoid out of bounds crash
     char tile = circuit[pos.y][pos.x];
 
+    if(!ValidEntry(tile, dir)){
+      dots[i].deathMarked = true;
+      continue;
+    }
+
+    // does the dot's new position require any actions?
+
     FlowCheck(dots[i], tile);
     CloneCheck(dots[i], tile);
+    OperatorCheck(dots[i]);
+  }
+
+  // kill all dots marked for death on this cycle
+  for(int i = 0; i < dots.size(); i++){
+    if(dots[i].deathMarked){
+      dots.erase(dots.begin()+i);
+      i--; // otherwise we'd skip a dot when they shift down
+    }
   }
 
   // add the clone buffer to the dot list
@@ -75,4 +94,11 @@ void Stepper::CloneCheck(Dot dot, char tile){
 
   cloneBuffer.push_back(dot.Clone(rot));
   cloneBuffer.push_back(dot.Clone(rot+2));
+}
+
+void Stepper::OperatorCheck(Dot &dot){
+  for(int i = 0; i < ops.size(); i++){
+    if(ops[i].position == dot.position)
+      return ops[i].AddDot(dot);
+  }
 }
