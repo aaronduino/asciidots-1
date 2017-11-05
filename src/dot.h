@@ -4,6 +4,10 @@
 class Dot{
 public:
   Point position;
+  bool enabled = true; // whether the dot should be stepped
+  bool deathMarked = false; // indicates this dot should be killed
+
+  double value = 0;
 
   Dot(Point position, int direction);
   Dot(Point position, Point vDir); // accept init with vector
