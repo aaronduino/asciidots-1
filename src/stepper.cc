@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include "stepper.h"
 #include "circuittools.h"
 #include "tiletools.h"
@@ -10,7 +11,9 @@ Stepper::Stepper(vector<string> circuit, vector<Operator> ops){
   this->ops = ops;
 }
 
-void Stepper::Step(vector<Dot> &dots){
+vector<string> Stepper::Step(vector<Dot> &dots){
+  vector<string> out;
+
   cloneBuffer.clear();
 
   // do all dots once every tick
@@ -45,6 +48,9 @@ void Stepper::Step(vector<Dot> &dots){
     FlowCheck(dots[i], tile);
     CloneCheck(dots[i], tile);
     OperatorCheck(dots[i]);
+    ReadCheck(dots[i], tile);
+    vector<string> outputs = WriteCheck(dots[i], tile);
+    out.insert(out.end(), outputs.begin(), outputs.end());
   }
 
   // kill all dots marked for death on this cycle
@@ -57,6 +63,7 @@ void Stepper::Step(vector<Dot> &dots){
 
   // add the clone buffer to the dot list
   dots.insert(dots.end(), cloneBuffer.begin(), cloneBuffer.end());
+  return out;
 }
 
 void Stepper::FlowCheck(Dot &dot, char tile){
@@ -101,4 +108,39 @@ void Stepper::OperatorCheck(Dot &dot){
     if(ops[i].position == dot.position)
       return ops[i].AddDot(dot);
   }
+}
+
+void Stepper::ReadCheck(Dot &dot, char tile){
+  if(tile == '#' && dot.state == none){
+    dot.state = read;
+    dot.value = 0;
+    return;
+  }
+
+  if(dot.state == read){
+    if(isdigit(tile)){
+      dot.value *= 10;
+      dot.value += tile - 48; // convert tile to a number
+    }
+    else
+      dot.state = none;
+  }
+}
+
+vector<string> Stepper::WriteCheck(Dot &dot, char tile){
+  vector<string> out;
+
+  if(tile == '$' && dot.state == none){
+    dot.state = write;
+    return vector<string> {};
+  }
+
+  if(dot.state == write){
+    if(tile == '#')
+      out.push_back(to_string(dot.value));
+    else
+      dot.state = none;
+  }
+
+  return out;
 }

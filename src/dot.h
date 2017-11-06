@@ -1,13 +1,18 @@
 #pragma once
 #include "point.h"
 
+enum dotState { none, read, write };
+
 class Dot{
 public:
   Point position;
+
   bool enabled = true; // whether the dot should be stepped
   bool deathMarked = false; // indicates this dot should be killed
 
   double value = 0;
+
+  dotState state = none;
 
   Dot(Point position, int direction);
   Dot(Point position, Point vDir); // accept init with vector

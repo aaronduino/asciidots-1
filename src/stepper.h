@@ -10,7 +10,7 @@ class Stepper{
 public:
   Stepper(std::vector<std::string> circuit, std::vector<Operator> ops);
 
-  void Step(std::vector<Dot> &dots);
+  std::vector<std::string> Step(std::vector<Dot> &dots);
 
 private:
   std::vector<std::string> circuit;
@@ -21,4 +21,6 @@ private:
   void FlowCheck(Dot &dot, char tile);
   void CloneCheck(Dot dot, char tile);
   void OperatorCheck(Dot &dot);
+  void ReadCheck(Dot &dot, char tile);
+  std::vector<std::string> WriteCheck(Dot &dot, char tile);
 };
