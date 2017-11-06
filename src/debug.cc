@@ -52,3 +52,12 @@ void Debug::DrawCircuit(){
   }
   refresh();
 }
+
+void Debug::Log(vector<string> text){
+  int circuitBuffer = circuit.size();
+  move(circuitBuffer + 2, 0);
+  for(int i = 0; i < text.size(); i++){
+    addstr(text[i].c_str());
+  }
+  refresh();
+}

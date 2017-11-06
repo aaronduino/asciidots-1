@@ -10,6 +10,7 @@ public:
   Debug(std::vector<std::string> circuit);
 
   void DrawDots(std::vector<Dot>); // colours tiles with dots
+  void Log(std::vector<std::string> text);
 
 private:
   std::vector<std::string> circuit;
