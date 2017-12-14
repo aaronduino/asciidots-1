@@ -1,23 +1,40 @@
 # compiler
 CC = g++
 EXE = dots
-# discover sources, require their objects, we'll work out deps later
+# compiler args
+COMPARGS = -Wall -Wextra
+LINKARGS = -lncurses -ltinfos
+# directories
+SRC = src
+OBJ = obj
+DEP = dep
+BIN = bin
+# discover sources, require their objects, we'll work out deps NOW
 SOURCES := $(shell find src/ -name '*.cc')
 OBJECTS := $(subst src/,obj/,$(SOURCES:%.cc=%.o))
+DEPENDS := $(subst src/,dep/,$(SOURCES:%.cc=%.d))
 
-.PHONY: asciidots clean rebuild
+.PHONY: all clean rebuild
 
-# link all objects when we have newest deps
-asciidots: $(OBJECTS)
-		$(CC) $(OBJECTS) -o bin/$(EXE) -lncurses -ltinfo
+all: $(EXE)
 
-# object required, compile twinned source
-obj/%.o: src/%.cc
-		$(CC) -c $< -o $@
+# link all object files
+$(EXE): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(BIN)/$(EXE) $(LINKARGS)
 
-# remove old object files
+# make .d files
+$(DEP)/%.d: $(SRC)/%.cc
+	$(CC) -MM $< -MT $@ > $@
+
+# compile source to object
+$(OBJ)/%.o: $(SRC)/%.cc
+	$(CC) $(COMPARGS) -c $< -o $@
+
+# clean the output directories (NOT SOURCE)
 clean:
-		rm -rf obj/* bin/*
+	rm -f $(BIN)/* $(OBJ)/* $(DEP)/*
 
-#clean and build
-rebuild: clean asciidots
+# recompile everything
+rebuild: clean all
+
+-include $(DEPENDS)
