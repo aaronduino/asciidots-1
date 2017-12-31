@@ -1,6 +1,6 @@
 # compiler
 CC = g++
-EXE = sdf
+EXE = dots
 # compiler args
 COMPARGS = -Wall -Wextra
 LINKARGS = -lncurses -ltinfo
@@ -9,14 +9,18 @@ SRC = src
 OBJ = obj
 DEP = dep
 BIN = bin
-# discover sources, require their objects and deps
+# discover sources, require their objects, we'll work out deps NOW
 SOURCES := $(shell find src/ -name '*.cc')
 OBJECTS := $(subst src/,obj/,$(SOURCES:%.cc=%.o))
 DEPENDS := $(subst src/,dep/,$(SOURCES:%.cc=%.d))
 
 .PHONY: all clean rebuild
 
-all: $(EXE)
+all: $(OBJ) $(DEP) $(BIN) $(EXE)
+
+# make working directories
+$(OBJ) $(DEP) $(BIN):
+	mkdir $@
 
 # link all object files
 $(EXE): $(OBJECTS)
@@ -24,7 +28,7 @@ $(EXE): $(OBJECTS)
 
 # make .d files
 $(DEP)/%.d: $(SRC)/%.cc
-	$(CC) -MM $< -MT $(OBJ)/$(@F:%.d=%.o) > $@
+	$(CC) -MM $< -MT $@ > $@
 
 # compile source to object
 $(OBJ)/%.o: $(SRC)/%.cc
