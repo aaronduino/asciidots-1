@@ -3,7 +3,7 @@ CC = g++
 EXE = dots
 # compiler args
 COMPARGS = -Wall -Wextra
-LINKARGS = -lncurses -ltinfo
+LINKARGS =
 # directories
 SRC = src
 OBJ = obj
