@@ -1,13 +1,12 @@
 #include "circuit.h"
 #include <fstream>
-#include <iostream>
 
 Circuit::Circuit(const std::string &path){
 	std::ifstream file(path);
 	std::string line;
 
-	// bounding box dimensions
-	int width = 0, height = 0;
+	// reset bounding box
+	width = height = 0;
 
 	// pull each line into data
 	while(std::getline(file, line)){
@@ -18,7 +17,12 @@ Circuit::Circuit(const std::string &path){
 		if((int)line.length() > width)
 			width = line.length();
 	}
+}
 
-	this->width = width;
-	this->height = height;
+char Circuit::get_tile(const int &x, const int &y){
+	// out of bounds, return whitespace
+	if(x < 0 || x >= width || y < 0 || y >= height)
+		return ' ';
+
+	return data[y][x];
 }
