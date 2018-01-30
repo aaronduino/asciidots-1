@@ -21,7 +21,7 @@ Circuit::Circuit(const std::string &path){
 
 char Circuit::get_tile(const int &x, const int &y){
 	// out of bounds, return whitespace
-	if(x < 0 || x >= width || y < 0 || y >= height)
+	if(x < 0 || x >= (int)data[y].length() || y < 0 || y >= height)
 		return ' ';
 
 	return data[y][x];
