@@ -18,6 +18,9 @@ public:
 	// return a tile at x, y. if out of bounds, return whitespace
 	char get_tile(const int &x, const int &y);
 
+	// find all spawn characters and add dots
+	void spawn_dots();
+
 private:
 	std::vector<std::string> data;
 };

@@ -17,6 +17,8 @@ Circuit::Circuit(const std::string &path){
 		if((int)line.length() > width)
 			width = line.length();
 	}
+
+	spawn_dots();
 }
 
 char Circuit::get_tile(const int &x, const int &y){
@@ -25,4 +27,14 @@ char Circuit::get_tile(const int &x, const int &y){
 		return ' ';
 
 	return data[y][x];
+}
+
+void Circuit::spawn_dots(){
+	// scan the circuit for '.' chars. TODO: support '·' (bullet)
+	for(int y = 0; y < height; y++) for(int x = 0; x < width; x++){
+		char tile = get_tile(x, y);
+
+		if(tile == '.')
+			dots.push_back(Dot(Vec2(x, y), Vec2(1, 0))); // face right for now
+	}
 }

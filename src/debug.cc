@@ -4,6 +4,7 @@
 void draw(Circuit circuit){
 	draw_circuit(circuit);
 	draw_dots(circuit);
+	// update for changes
 	refresh();	
 }
 
