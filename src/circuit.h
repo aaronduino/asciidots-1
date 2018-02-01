@@ -11,9 +11,11 @@ public:
 	// dot collection
 	std::vector<Dot> dots;
 
+	Circuit(const std::string &path);
+	
 
 	// load a circuit from path into data
-	Circuit(const std::string &path);
+	void load_circuit(const std::string &path);
 
 	// return a tile at x, y. if out of bounds, return whitespace
 	char get_tile(const int &x, const int &y);

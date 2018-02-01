@@ -2,6 +2,11 @@
 #include <fstream>
 
 Circuit::Circuit(const std::string &path){
+	load_circuit(path);
+	spawn_dots();
+}
+
+void Circuit::load_circuit(const std::string &path){
 	std::ifstream file(path);
 	std::string line;
 
@@ -17,8 +22,6 @@ Circuit::Circuit(const std::string &path){
 		if((int)line.length() > width)
 			width = line.length();
 	}
-
-	spawn_dots();
 }
 
 char Circuit::get_tile(const int &x, const int &y){
