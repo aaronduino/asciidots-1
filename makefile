@@ -11,10 +11,11 @@ BIN = bin
 # discover sources, require their objects, we'll work out deps NOW
 SOURCES := $(shell find $(SRC) -name '*.cc')
 OBJECTS := $(subst $(SRC),$(OBJ),$(SOURCES:%.cc=%.o))
-DEPENDS := $(OBJECTS:%.o=%.d)
+DEPENDS := $(shell find $(OBJ) -name '*.d')
 FOLDERS := $(subst $(SRC),$(OBJ),$(shell find $(SRC) -type d))
 
 .PHONY: all dirs clean rebuild
+.PRECIOUS: $(OBJ)/%.d # don't delete deps
 
 all: dirs $(BIN) $(EXE)
 
@@ -22,27 +23,27 @@ all: dirs $(BIN) $(EXE)
 $(BIN):
 	mkdir -p $(BIN)
 
-# duplicate src folder structure to obj
-dirs:
-	@mkdir -p $(FOLDERS)
-
 # link all object files
 $(EXE): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $(BIN)/$(EXE) $(LINKARGS)
 
-# make .d files
-$(OBJ)/%.d: $(SRC)/%.cc
-	$(CC) -MM $< -MT $@ > $@
-
 # compile source to object
-$(OBJ)/%.o: $(SRC)/%.cc
+$(OBJ)/%.o: $(SRC)/%.cc $(OBJ)/%.d
 	$(CC) $(COMPARGS) -c $< -o $@
+
+# generate dependency files
+$(OBJ)/%.d: $(SRC)/%.cc
+	$(CC) -MM $< -MT "$(subst .d,.o,$@) $@" > $@
 
 # clean the output directories (NOT SOURCE)
 clean:
-	rm -f $(BIN)/* $(OBJ)/*
+	rm -rf $(BIN)/* $(OBJ)/*
 
 # recompile everything
 rebuild: clean all
+
+# duplicate src folder structure to obj
+dirs:
+	mkdir -p $(FOLDERS)
 
 -include $(DEPENDS)
