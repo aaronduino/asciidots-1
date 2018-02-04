@@ -10,4 +10,7 @@ public:
 
 	// take one step forward
 	void move();
+
+	// turn positive or negative multiples of 90 degrees
+	void turn(int turns);
 };
