@@ -8,6 +8,8 @@ Dot::Dot(Vec2 pos, Vec2 dir){
 Dot::Dot(const Dot &dot){
 	pos = dot.pos;
 	dir = dot.dir;
+	value = dot.value;
+	id = dot.id;
 }
 
 void Dot::move(){

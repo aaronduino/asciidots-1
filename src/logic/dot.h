@@ -1,10 +1,23 @@
 #pragma once
 #include "../vec2.h"
 
+// states
+#define STATE_NONE      0
+#define STATE_HASH      1
+#define STATE_AT        2
+#define STATE_READVALUE 3
+#define STATE_READID    4
+
 class Dot{
 public:
 	// vector position and normalised direction
 	Vec2 pos, dir;
+	// track state between ticks
+	int state = STATE_NONE;
+
+	// value and ID init to 0
+	int value = 0;
+	int id = 0;
 
 	Dot(Vec2 pos, Vec2 dir);
 	Dot(const Dot &dot); // clone constructor
