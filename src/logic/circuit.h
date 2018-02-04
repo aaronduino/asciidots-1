@@ -2,10 +2,16 @@
 #include <string>
 #include <vector>
 
+class Dot;
+
 class Circuit{
 public:
 	// bounds
 	uint32_t width, height;
+
+	// dot collection
+	std::vector<Dot> dots;
+
 
 	void load_circuit(const std::string &path);
 
