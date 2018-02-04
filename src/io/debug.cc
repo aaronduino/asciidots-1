@@ -5,6 +5,7 @@
 
 void init_debug(){
 	initscr();
+	curs_set(0); // hide cursor
 
 	// colour pairs
 	start_color();
@@ -12,6 +13,7 @@ void init_debug(){
 }
 void end_debug(){
 	getch();
+	curs_set(1); // show cursor again
 	endwin();
 }
 
