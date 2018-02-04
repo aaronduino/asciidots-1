@@ -114,6 +114,20 @@ bool Circuit::step(){
 				else
 					dots[i].turn(-1);
 				break;
+			case '(': // bounce
+			case '>': // both have same behaviour, brackets just kill verticals
+				dots[i].dir = Vec2(1, 0);
+				break;
+			case ')':
+			case '<':
+				dots[i].dir = Vec2(-1, 0);
+				break;
+			case 'v':
+				dots[i].dir = Vec2(0, 1);
+				break;
+			case '^':
+				dots[i].dir = Vec2(0, -1);
+				break;
 		}
 	}
 
