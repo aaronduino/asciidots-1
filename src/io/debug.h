@@ -7,3 +7,4 @@ void init_debug();
 void end_debug();
 
 void draw_circuit(Circuit circuit);
+void draw_dots(Circuit circuit);
