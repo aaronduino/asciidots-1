@@ -48,3 +48,15 @@ char Circuit::get_tile(const uint32_t &y, const uint32_t &x){
 	else
 		return row[x];
 }
+
+// assumes legal travel, false if illegal
+bool Circuit::valid_travel(const char &tile, const Vec2 &dir){
+	// moving vertical, entering a horizontal?
+	if(dir.x == 0 && (tile == '-' || tile == '(' || tile == ')'))
+			return false;
+	// moving horizontal, entering a vertical?
+	else if(dir.y == 0 && tile == '|')
+		return false;
+	else
+		return true;
+}
