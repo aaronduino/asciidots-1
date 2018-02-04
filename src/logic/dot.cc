@@ -5,6 +5,11 @@ Dot::Dot(Vec2 pos, Vec2 dir){
 	this->dir = dir;
 }
 
+Dot::Dot(const Dot &dot){
+	pos = dot.pos;
+	dir = dot.dir;
+}
+
 void Dot::move(){
 	pos += dir;
 }

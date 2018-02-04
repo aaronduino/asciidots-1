@@ -85,6 +85,9 @@ bool Circuit::step(){
 	if(dots.size() == 0)
 		return false;
 
+	// holds clones to be spawned at the end of the tick
+	std::vector<Dot> clones;
+
 	for(uint32_t i = 0; i < dots.size(); i++){
 		// move this dot
 		dots[i].move();
@@ -101,6 +104,19 @@ bool Circuit::step(){
 
 		// TILE PROCESSING
 		process_flow(tile, dots[i]);
+		// spawn clones
+		if(tile == '*'){
+			clones.push_back(Dot(dots[i]));
+			clones[clones.size()-1].turn(-1);
+			clones.push_back(Dot(dots[i]));
+			clones[clones.size()-1].turn(1);
+		}
+	}
+
+	// spawn the clones in the buffer
+	while(clones.size() > 0){
+		dots.push_back(clones[0]);
+		clones.erase(clones.begin());
 	}
 
 	return true;

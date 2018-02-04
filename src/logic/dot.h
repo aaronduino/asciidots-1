@@ -7,6 +7,7 @@ public:
 	Vec2 pos, dir;
 
 	Dot(Vec2 pos, Vec2 dir);
+	Dot(const Dot &dot); // clone constructor
 
 	// take one step forward
 	void move();
