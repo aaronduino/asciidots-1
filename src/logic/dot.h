@@ -7,4 +7,7 @@ public:
 	Vec2 pos, dir;
 
 	Dot(Vec2 pos, Vec2 dir);
+
+	// take one step forward
+	void move();
 };

@@ -80,3 +80,25 @@ bool Circuit::valid_travel(const char &tile, const Vec2 &dir){
 	else
 		return true;
 }
+
+bool Circuit::step(){
+	if(dots.size() == 0)
+		return false;
+
+	for(uint32_t i = 0; i < dots.size(); i++){
+		// move this dot
+		dots[i].move();
+
+		// what tile did it land on
+		char tile = get_tile(dots[i].pos.y, dots[i].pos.x);
+
+		// if we landed on empty or illegally entered a tile, die
+		if(tile == ' ' || !valid_travel(tile, dots[i].dir)){
+			dots.erase(dots.begin()+i);
+			i--; // everything shifts down, so go back one
+			continue;
+		}
+	}
+
+	return true;
+}
