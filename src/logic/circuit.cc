@@ -100,35 +100,7 @@ bool Circuit::step(){
 		}
 
 		// TILE PROCESSING
-		switch(tile){
-			// FLOW
-			case '\\':
-				if(dots[i].dir.y == 0) // horizontal
-					dots[i].turn(1);
-				else
-					dots[i].turn(-1);
-				break;
-			case '/':
-				if(dots[i].dir.x == 0) // vertical
-					dots[i].turn(1);
-				else
-					dots[i].turn(-1);
-				break;
-			case '(': // bounce
-			case '>': // both have same behaviour, brackets just kill verticals
-				dots[i].dir = Vec2(1, 0);
-				break;
-			case ')':
-			case '<':
-				dots[i].dir = Vec2(-1, 0);
-				break;
-			case 'v':
-				dots[i].dir = Vec2(0, 1);
-				break;
-			case '^':
-				dots[i].dir = Vec2(0, -1);
-				break;
-		}
+		process_flow(tile, dots[i]);
 	}
 
 	return true;

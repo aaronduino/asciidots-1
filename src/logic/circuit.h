@@ -27,8 +27,12 @@ public:
 	// can this tile legally be entered in this direction
 	bool valid_travel(const char &tile, const Vec2 &dir);
 
+	// PROCESSING
 	// move and process all dots once, returns true if stuff happens
 	bool step();
+
+	// process direction of flow tiles
+	void process_flow(const char &tile, Dot &dot);
 
 private:
 	// working section of the circuit
