@@ -98,6 +98,23 @@ bool Circuit::step(){
 			i--; // everything shifts down, so go back one
 			continue;
 		}
+
+		// TILE PROCESSING
+		switch(tile){
+			// FLOW
+			case '\\':
+				if(dots[i].dir.y == 0) // horizontal
+					dots[i].turn(1);
+				else
+					dots[i].turn(-1);
+				break;
+			case '/':
+				if(dots[i].dir.x == 0) // vertical
+					dots[i].turn(1);
+				else
+					dots[i].turn(-1);
+				break;
+		}
 	}
 
 	return true;
