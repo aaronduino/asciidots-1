@@ -36,14 +36,34 @@ void Circuit::parse_body(){
 }
 
 void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
-	// spawn
-	dots.push_back(Dot(Vec2(x, y), Vec2(1, 0)));
+	// find a direction for the dot to spawn pointing
+	Vec2 compass[4] = { Vec2(0, -1), Vec2(1, 0), Vec2(0, 1), Vec2(-1, 0) };
+	std::vector<Vec2> exits;
+	for(int i = 0; i < 4; i++){
+		// prevent underflow
+		if((x == 0 && compass[i].x < 0) || (y == 0 && compass[i].y < 0))
+			continue;
+
+		char tile = get_tile(y + compass[i].y, x + compass[i].x);
+
+		if(tile == ' ') // empty space isn't an exit
+			continue;
+
+		// only an exit if we can legally go this way
+		if(valid_travel(tile, compass[i]))
+			exits.push_back(compass[i]);
+	}
+
+	// only spawn if there's a possible unambiguous exit
+	if(exits.size() == 1)
+		dots.push_back(Dot(Vec2(x, y), exits[0]));
 }
 
 char Circuit::get_tile(const uint32_t &y, const uint32_t &x){
 	std::string row = body[y];
 
-	if(x >= row.length())
+	// if out of bounds, return ' '
+	if(x >= row.length() || y >= height)
 		return ' ';
 	else
 		return row[x];
