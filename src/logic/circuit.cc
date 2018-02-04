@@ -21,3 +21,12 @@ void Circuit::load_circuit(const std::string &path){
 
 	file.close();
 }
+
+char Circuit::get_tile(const uint32_t &y, const uint32_t &x){
+	std::string row = body[y];
+
+	if(x >= row.length())
+		return ' ';
+	else
+		return row[x];
+}
