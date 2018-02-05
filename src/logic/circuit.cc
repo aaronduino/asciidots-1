@@ -2,6 +2,10 @@
 #include <fstream>
 #include "dot.h"
 
+/*
+ * contains general methods and initialisation of the Circuit class
+ */
+
 void Circuit::load_circuit(const std::string &path){
 	// clear body
 	body = std::vector<std::string>();

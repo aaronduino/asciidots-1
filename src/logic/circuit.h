@@ -5,6 +5,7 @@
 class Dot;
 class Vec2;
 
+// implementation split between circuit.cc and processing.cc
 class Circuit{
 public:
 	// bounds
@@ -28,11 +29,20 @@ public:
 	bool valid_travel(const char &tile, const Vec2 &dir);
 
 	// PROCESSING
+
 	// move and process all dots once, returns true if stuff happens
 	bool step();
 
+	// the following processes return true if subsequent processing is irrelevent
+
 	// process direction of flow tiles
-	void process_flow(const char &tile, Dot &dot);
+	bool process_flow(const char &tile, Dot &dot);
+
+	// detect switching into digit reading modes
+	bool process_read_mode(const char &tile, Dot &dot);
+
+	// actually read digit tiles
+	bool process_reading(const char &tile, Dot &dot);
 
 private:
 	// working section of the circuit

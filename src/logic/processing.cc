@@ -1,6 +1,10 @@
 #include "circuit.h"
 #include "dot.h"
 
+/*
+ * contains tile processing logic for the Circuit class
+ */
+
 bool Circuit::step(){
 	if(dots.size() == 0)
 		return false;
@@ -23,61 +27,23 @@ bool Circuit::step(){
 		}
 
 		// TILE PROCESSING
-		// reading logic
-		if(dots[i].state == STATE_NONE){
-			if(tile == '#')
-				dots[i].state = STATE_HASH;
-			else if(tile == '@')
-				dots[i].state = STATE_AT;
-		}
-		// last tile was a #, if this tile's a digit we're starting a read
-		else if(dots[i].state == STATE_HASH){
-			if(tile >= '0' && tile <= '9'){ // is this tile a digit
-				dots[i].state = STATE_READVALUE;
-				dots[i].value = 0; // prepare for a new value
-			}
-			else // false alarm
-				dots[i].state = STATE_NONE;
-		}
-		// last tile was an @, if this tile's a digit we're starting a read
-		else if(dots[i].state == STATE_AT){ // same for ID. TODO: don't repeat code
-			if(tile >= '0' && tile <= '9'){
-				dots[i].state = STATE_READID;
-				dots[i].id = 0;
-			}
-			else
-				dots[i].state = STATE_NONE;
-		}
+		// should we prepare to start reading
+		if(process_read_mode(tile, dots[i]))
+			continue;
 
-		// we're currently doing reading
-		// if this tile's a digit, read it and skip processing
-		// if it's not a digit, stop reading and process tile normally
-		if(dots[i].state == STATE_READVALUE){
-			if(tile >= '0' && tile <= '9'){ // is this tile another digit to read
-				dots[i].value *= 10; // shift all digits left
-				dots[i].value += tile - '0'; // tack on the new digit
-				continue; // don't do any other processing for this tile
-			}
-			else
-				dots[i].state = STATE_NONE;
-		} // exactly the same but for ID not value. TODO: don't repeat code
-		else if(dots[i].state == STATE_READID){
-			if(tile >= '0' && tile <= '9'){
-				dots[i].id *= 10;
-				dots[i].id += tile - '0';
-				continue;
-			}
-			else
-				dots[i].state = STATE_NONE;
-		}
+		// should we be reading this tile as a digit
+		if(process_reading(tile, dots[i]))
+			continue;
 
 		// process this tile
 		if(dots[i].state == STATE_NONE){
-			// change directions
-			process_flow(tile, dots[i]);
+			// should we be changing direction
+			if(process_flow(tile, dots[i]))
+				continue;
 
-			// load clones into buffer for next tick
+			// should we be cloning here
 			if(tile == '*'){
+				// add clones to a buffer so they're not active this step
 				clones.push_back(Dot(dots[i]));
 				clones[clones.size()-1].turn(-1);
 				clones.push_back(Dot(dots[i]));
@@ -86,7 +52,7 @@ bool Circuit::step(){
 		}
 	}
 
-	// spawn the clones in the buffer
+	// spawn the clones from the buffer
 	while(clones.size() > 0){
 		dots.push_back(clones[0]);
 		clones.erase(clones.begin());
@@ -95,7 +61,7 @@ bool Circuit::step(){
 	return true;
 }
 
-void Circuit::process_flow(const char &tile, Dot &dot){
+bool Circuit::process_flow(const char &tile, Dot &dot){
 	switch(tile){
 			// FLOW
 			case '\\':
@@ -124,5 +90,68 @@ void Circuit::process_flow(const char &tile, Dot &dot){
 			case '^':
 				dot.dir = Vec2(0, -1);
 				break;
+			default: // nothing was affected, more processing can be done
+				return false;
 		}
+	return true; // one of the cases hit, no subsequent processing required
+}
+
+bool Circuit::process_read_mode(const char &tile, Dot &dot){
+	// reading logic
+	if(dot.state == STATE_NONE){
+		if(tile == '#'){
+			dot.state = STATE_HASH;
+			return true;
+		}
+		else if(tile == '@'){
+			dot.state = STATE_AT;
+			return true;
+		}
+	}
+	// last tile was a #, if this tile's a digit we're starting a read
+	else if(dot.state == STATE_HASH){
+		if(tile >= '0' && tile <= '9'){ // is this tile a digit
+			dot.state = STATE_READVALUE;
+			dot.value = 0; // prepare for a new value
+		}
+		else // false alarm, we're not going to read
+			dot.state = STATE_NONE;
+	}
+	// last tile was an @, if this tile's a digit we're starting a read
+	else if(dot.state == STATE_AT){ // same for ID. TODO: don't repeat code
+		if(tile >= '0' && tile <= '9'){
+			dot.state = STATE_READID;
+			dot.id = 0;
+		}
+		else
+			dot.state = STATE_NONE;
+	}
+
+	return false;
+}
+
+bool Circuit::process_reading(const char &tile, Dot &dot){
+	// we're currently doing reading
+	// if this tile's a digit, read it and skip processing
+	// if it's not a digit, stop reading and process tile normally
+	if(dot.state == STATE_READVALUE){
+		if(tile >= '0' && tile <= '9'){ // is this tile another digit to read
+			dot.value *= 10; // shift all digits left
+			dot.value += tile - '0'; // tack on the new digit
+			return true; // don't do any other processing for this tile
+		}
+		else
+			dot.state = STATE_NONE;
+	} // exactly the same but for ID not value. TODO: don't repeat code
+	else if(dot.state == STATE_READID){
+		if(tile >= '0' && tile <= '9'){
+			dot.id *= 10;
+			dot.id += tile - '0';
+			return true;
+		}
+		else
+			dot.state = STATE_NONE;
+	}
+
+	return false;
 }
