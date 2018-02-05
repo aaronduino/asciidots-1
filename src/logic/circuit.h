@@ -22,7 +22,7 @@ public:
 	// attempt to spawn a dot here
 	void spawn_dot(const uint32_t &y, const uint32_t &x);
 
-	char get_tile(const uint32_t &y, const uint32_t &x);
+	char get_tile(const int64_t &y, const int64_t &x);
 
 	// can this tile legally be entered in this direction
 	bool valid_travel(const char &tile, const Vec2 &dir);

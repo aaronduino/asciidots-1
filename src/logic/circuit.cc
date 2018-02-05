@@ -59,11 +59,11 @@ void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
 		dots.push_back(Dot(Vec2(x, y), exits[0]));
 }
 
-char Circuit::get_tile(const uint32_t &y, const uint32_t &x){
+char Circuit::get_tile(const int64_t &y, const int64_t &x){
 	std::string row = body[y];
 
 	// if out of bounds, return ' '
-	if(x >= row.length() || y >= height)
+	if(x >= (int64_t)row.length() || x < 0 || y >= (int64_t)height || y < 0)
 		return ' ';
 	else
 		return row[x];
