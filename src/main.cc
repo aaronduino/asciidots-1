@@ -3,7 +3,6 @@
 #include <chrono> // seconds
 #include "logic/circuit.h"
 #include "io/debug.h"
-#include "logic/dot.h"
 
 int main(int argc, char **argv){
 	if(argc != 2) return EXIT_FAILURE;

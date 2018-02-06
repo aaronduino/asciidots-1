@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "dot.h"
 
-class Dot;
 class Vec2;
 
 // implementation split between circuit.cc and processing.cc
