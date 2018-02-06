@@ -1,41 +1,51 @@
 #include "debug.h"
 #include <ncurses.h>
 #include "../logic/circuit.h"
-#include "../logic/dot.h"
 
-void init_debug(){
+Debug::Debug(){
 	initscr();
 	curs_set(0); // hide cursor
 
-	// colour pairs
+	// windows
+	wcircuit = newwin(50, 50, 0, 0);
+
+	// colours
 	start_color();
-	init_pair(1, COLOR_RED, COLOR_BLACK); // dot
-}
-void end_debug(){
-	getch();
-	curs_set(1); // show cursor again
-	endwin();
+	init_pair(1, COLOR_RED, COLOR_BLACK); // dots
 }
 
-void draw_circuit(Circuit circuit){
+Debug::~Debug(){
+	curs_set(1); // bring cursor back
+	endwin(); // clean up ncurses
+}
+
+void Debug::draw(Circuit circuit){
+	draw_circuit(circuit); // base layer
+	decorate_circuit(circuit); // colour
+
+	// update circuit window
+	wrefresh(wcircuit);
+}
+
+void Debug::draw_circuit(Circuit circuit){
+	// iterate all tiles
 	for(uint32_t y = 0; y < circuit.height; y++){
 		for(uint32_t x = 0; x < circuit.width; x++){
-			move(y, x);
-			addch(circuit.get_tile(y, x));
+			// load tile, move and draw it
+			char tile = circuit.get_tile(y, x);
+			mvwaddch(wcircuit, y, x, tile);
 		}
 	}
-	refresh();
 }
 
-void draw_dots(Circuit circuit){
-	attron(COLOR_PAIR(1));
-
+void Debug::decorate_circuit(Circuit circuit){
+	// iterate dots
 	for(uint32_t i = 0; i < circuit.dots.size(); i++){
-		Vec2 pos = circuit.dots[i].pos;
-		move(pos.y, pos.x);
-		addch(circuit.get_tile(pos.y, pos.x));
-	}
+		int y, x; // pull dot's position for convenience
+		y = circuit.dots[i].pos.y; x = circuit.dots[i].pos.x;
 
-	refresh();
-	attroff(COLOR_PAIR(1));
+		char tile = circuit.get_tile(y, x); // find tile
+		// replace the tile but with colour
+		mvwaddch(wcircuit, y, x, tile | COLOR_PAIR(1));
+	}
 }

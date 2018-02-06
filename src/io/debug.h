@@ -1,10 +1,23 @@
 #pragma once
 
+// forward declaration
 class Circuit;
+typedef struct _win_st WINDOW;
 
-// start and clean up the ncurses env
-void init_debug();
-void end_debug();
+class Debug{
+public:
+	Debug();
+	~Debug();
 
-void draw_circuit(Circuit circuit);
-void draw_dots(Circuit circuit);
+	// draw all debug windows
+	void draw(Circuit circuit);
+
+private:
+	// windows
+	WINDOW *wcircuit;
+
+	// draw the circuit in white
+	void draw_circuit(Circuit circuit);
+	// colour interesting features
+	void decorate_circuit(Circuit circuit);
+};

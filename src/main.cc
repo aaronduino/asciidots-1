@@ -10,14 +10,16 @@ int main(int argc, char **argv){
 	Circuit circuit;
 	circuit.load_circuit(argv[1]);
 
-	init_debug();
-	while(circuit.step()){
-		draw_circuit(circuit);
-		draw_dots(circuit);
+	// init new debugger
+	Debug debug;
 
+	// loop until circuit reports stability
+	while(circuit.step()){
+		debug.draw(circuit); // draw circuit
+
+		// pause for a moment
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	end_debug();
 
 	return EXIT_SUCCESS;
 }
