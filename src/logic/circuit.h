@@ -44,6 +44,9 @@ public:
 	// actually read digit tiles
 	bool process_reading(const char &tile, Dot &dot);
 
+	// perform writing logic if including switching to write modes
+	bool process_writing(const char &tile, Dot &dot);
+
 private:
 	// working section of the circuit
 	std::vector<std::string> body;

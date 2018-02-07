@@ -1,5 +1,6 @@
 #include "circuit.h"
 #include "dot.h"
+#include "../io/io.h"
 
 /*
  * contains tile processing logic for the Circuit class
@@ -33,6 +34,10 @@ bool Circuit::step(){
 
 		// should we be reading this tile as a digit
 		if(process_reading(tile, dots[i]))
+			continue;
+
+		// should we be doing any outputting
+		if(process_writing(tile, dots[i]))
 			continue;
 
 		// process this tile
@@ -97,7 +102,6 @@ bool Circuit::process_flow(const char &tile, Dot &dot){
 }
 
 bool Circuit::process_read_mode(const char &tile, Dot &dot){
-	// reading logic
 	if(dot.state == STATE_NONE){
 		if(tile == '#'){
 			dot.state = STATE_HASH;
@@ -153,5 +157,31 @@ bool Circuit::process_reading(const char &tile, Dot &dot){
 			dot.state = STATE_NONE;
 	}
 
+	return false;
+}
+
+bool Circuit::process_writing(const char &tile, Dot &dot){
+	// encounter the output char, prepare to write something
+	if(dot.state == STATE_NONE){
+		if(tile == '$'){
+			dot.state = STATE_WRITE;
+			return true;
+		}
+	}
+	// last char was a $, if this is # or @ then output value or ID
+	else if(dot.state == STATE_WRITE){
+		if(tile == '#'){
+			output(std::to_string(dot.value));
+			return true;
+		}
+		else if(tile == '@'){
+			output(std::to_string(dot.id));
+			return true;
+		}
+		else{ // not a valid thing to output
+			dot.state = STATE_NONE;
+			return false;
+		}
+	}
 	return false;
 }
