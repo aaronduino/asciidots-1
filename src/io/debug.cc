@@ -1,13 +1,15 @@
 #include "debug.h"
 #include <ncurses.h>
 #include "../logic/circuit.h"
+#include "io.h"
 
 Debug::Debug(){
 	initscr();
 	curs_set(0); // hide cursor
 
 	// windows
-	wcircuit = newwin(50, 50, 0, 0);
+	wcircuit = newwin(6, 25, 0, 0);
+	woutput = newwin(5, 25, 6, 0);
 
 	// colours
 	start_color();
@@ -25,6 +27,9 @@ void Debug::draw(Circuit circuit){
 
 	// update circuit window
 	wrefresh(wcircuit);
+
+	draw_output();
+	wrefresh(woutput);
 }
 
 void Debug::draw_circuit(Circuit circuit){
@@ -47,5 +52,11 @@ void Debug::decorate_circuit(Circuit circuit){
 		char tile = circuit.get_tile(y, x); // find tile
 		// replace the tile but with colour
 		mvwaddch(wcircuit, y, x, tile | COLOR_PAIR(1));
+	}
+}
+
+void Debug::draw_output(){
+	for(uint32_t i = 0; i < get_output().size(); i++){
+		mvwaddstr(woutput, i, 0, get_output()[i].c_str());
 	}
 }

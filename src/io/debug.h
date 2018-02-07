@@ -15,9 +15,12 @@ public:
 private:
 	// windows
 	WINDOW *wcircuit;
+	WINDOW *woutput;
 
 	// draw the circuit in white
 	void draw_circuit(Circuit circuit);
 	// colour interesting features
 	void decorate_circuit(Circuit circuit);
+	// draw the debug window
+	void draw_output();
 };
