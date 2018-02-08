@@ -17,4 +17,8 @@ public:
 	// subtraction
 	Vec2 operator -=(const Vec2 &rhs);
 	friend Vec2 operator -(Vec2 lhs, const Vec2 &rhs);
+
+	// equality
+	bool operator ==(const Vec2 &rhs);
+	bool operator !=(const Vec2 &rhs);
 };

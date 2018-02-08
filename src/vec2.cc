@@ -28,3 +28,10 @@ Vec2 operator -(Vec2 lhs, const Vec2 &rhs){
 	lhs -= rhs;
 	return rhs;
 }
+
+bool Vec2::operator ==(const Vec2 &rhs){
+	return x == rhs.x && y == rhs.y;
+}
+bool Vec2::operator !=(const Vec2 &rhs){
+	return !(*this == rhs);
+}
