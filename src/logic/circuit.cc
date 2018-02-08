@@ -67,7 +67,7 @@ void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
 
 	// only spawn if there's a possible unambiguous exit
 	if(exits.size() == 1)
-		dots.push_back(Dot(Vec2(x, y), exits[0]));
+		dots.push_back(new Dot(Vec2(x, y), exits[0]));
 }
 
 char Circuit::get_tile(const int64_t &y, const int64_t &x){

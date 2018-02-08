@@ -11,21 +11,21 @@ bool Circuit::step(){
 		return false;
 
 	// holds clones to be spawned at the end of the tick
-	std::vector<Dot> clones;
+	std::vector<Dot*> clones;
 
 	for(uint32_t i = 0; i < dots.size(); i++){
 		// don't do anything with disabled dots
-		if(dots[i].state == STATE_DISABLED)
+		if(dots[i]->state == STATE_DISABLED)
 			continue;
 
 		// move this dot
-		dots[i].move();
+		dots[i]->move();
 
 		// what tile did it land on
-		char tile = get_tile(dots[i].pos.y, dots[i].pos.x);
+		char tile = get_tile(dots[i]->pos.y, dots[i]->pos.x);
 
 		// if we landed on empty or illegally entered a tile, die
-		if(tile == ' ' || !valid_travel(tile, dots[i].dir)){
+		if(tile == ' ' || !valid_travel(tile, dots[i]->dir)){
 			dots.erase(dots.begin()+i);
 			i--; // everything shifts down, so go back one
 			continue;
@@ -33,30 +33,30 @@ bool Circuit::step(){
 
 		// TILE PROCESSING
 		// should we prepare to start reading
-		if(process_read_mode(tile, dots[i]))
+		if(process_read_mode(tile, *dots[i]))
 			continue;
 
 		// should we be reading this tile as a digit
-		if(process_reading(tile, dots[i]))
+		if(process_reading(tile, *dots[i]))
 			continue;
 
 		// should we be doing any outputting
-		if(process_writing(tile, dots[i]))
+		if(process_writing(tile, *dots[i]))
 			continue;
 
 		// process this tile
-		if(dots[i].state == STATE_NONE){
+		if(dots[i]->state == STATE_NONE){
 			// should we be changing direction
-			if(process_flow(tile, dots[i]))
+			if(process_flow(tile, *dots[i]))
 				continue;
 
 			// should we be cloning here
 			if(tile == '*'){
 				// add clones to a buffer so they're not active this step
-				clones.push_back(Dot(dots[i]));
-				clones[clones.size()-1].turn(-1);
-				clones.push_back(Dot(dots[i]));
-				clones[clones.size()-1].turn(1);
+				clones.push_back(new Dot(*dots[i]));
+				clones[clones.size()-1]->turn(-1);
+				clones.push_back(new Dot(*dots[i]));
+				clones[clones.size()-1]->turn(1);
 			}
 		}
 	}

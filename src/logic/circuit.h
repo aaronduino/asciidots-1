@@ -14,7 +14,7 @@ public:
 	uint32_t width, height;
 
 	// dot collection
-	std::vector<Dot> dots;
+	std::vector<Dot*> dots;
 	// operator collection
 	std::vector<Operator> ops;
 

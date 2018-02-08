@@ -47,7 +47,7 @@ void Debug::decorate_circuit(Circuit circuit){
 	// iterate dots
 	for(uint32_t i = 0; i < circuit.dots.size(); i++){
 		int y, x; // pull dot's position for convenience
-		y = circuit.dots[i].pos.y; x = circuit.dots[i].pos.x;
+		y = circuit.dots[i]->pos.y; x = circuit.dots[i]->pos.x;
 
 		char tile = circuit.get_tile(y, x); // find tile
 		// replace the tile but with colour
