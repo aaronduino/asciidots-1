@@ -1,7 +1,7 @@
 #pragma once
 
 // integer order 2 vector
-class Vec2{
+struct Vec2{
 public:
 	// values
 	int x, y;
