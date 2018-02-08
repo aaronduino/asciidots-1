@@ -49,7 +49,7 @@ bool Circuit::step(){
 			// is there an operator on this tile
 			for(uint32_t j = 0; j < ops.size(); j++){
 				if(ops[j].pos == dots[i]->pos)
-					ops[j].add_dot(*dots[i]);
+					ops[j].add_dot(dots[i]);
 			}
 			
 			// should we be changing direction
