@@ -2,7 +2,9 @@
 #include <string>
 #include <vector>
 #include "dot.h"
+#include "operator.h"
 
+// forward declarations
 class Vec2;
 
 // implementation split between circuit.cc and processing.cc
@@ -13,6 +15,8 @@ public:
 
 	// dot collection
 	std::vector<Dot> dots;
+	// operator collection
+	std::vector<Operator> ops;
 
 
 	void load_circuit(const std::string &path);
