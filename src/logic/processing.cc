@@ -14,6 +14,10 @@ bool Circuit::step(){
 	std::vector<Dot> clones;
 
 	for(uint32_t i = 0; i < dots.size(); i++){
+		// don't do anything with disabled dots
+		if(dots[i].state == STATE_DISABLED)
+			continue;
+
 		// move this dot
 		dots[i].move();
 

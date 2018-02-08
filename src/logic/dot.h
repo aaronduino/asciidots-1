@@ -8,6 +8,7 @@
 #define STATE_READVALUE 3
 #define STATE_READID    4
 #define STATE_WRITE     5
+#define STATE_DISABLED  6
 
 class Dot{
 public:
