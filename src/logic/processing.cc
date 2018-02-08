@@ -46,6 +46,12 @@ bool Circuit::step(){
 
 		// process this tile
 		if(dots[i]->state == STATE_NONE){
+			// is there an operator on this tile
+			for(uint32_t j = 0; j < ops.size(); j++){
+				if(ops[j].pos == dots[i]->pos)
+					ops[j].add_dot(*dots[i]);
+			}
+			
 			// should we be changing direction
 			if(process_flow(tile, *dots[i]))
 				continue;
