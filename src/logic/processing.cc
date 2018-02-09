@@ -26,8 +26,7 @@ bool Circuit::step(){
 
 		// if we landed on empty or illegally entered a tile, die
 		if(tile == ' ' || !valid_travel(tile, dots[i]->dir)){
-			dots.erase(dots.begin()+i);
-			i--; // everything shifts down, so go back one
+			dots[i]->state = STATE_DEAD;
 			continue;
 		}
 
@@ -66,6 +65,14 @@ bool Circuit::step(){
 				clones.push_back(new Dot(*dots[i]));
 				clones[clones.size()-1]->turn(1);
 			}
+		}
+	}
+
+	// remove dots with state STATE_DEAD
+	for(uint32_t i = 0; i < dots.size(); i++){
+		if(dots[i]->state == STATE_DEAD){
+			dots.erase(dots.begin() + i);
+			i--;
 		}
 	}
 
