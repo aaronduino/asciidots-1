@@ -17,9 +17,9 @@ void Operator::add_dot(Dot *dot){
 
 	// release if there are pairs
 	while(primary.size() > 0 && secondary.size() > 0){
-		// for now release both. TODO: kill one
+		// release primary, kill secondary
 		primary.back()->state = STATE_NONE;
-		secondary.back()->state = STATE_NONE;
+		secondary.back()->state = STATE_DEAD;
 
 		// forget them, they're gone
 		primary.pop();
