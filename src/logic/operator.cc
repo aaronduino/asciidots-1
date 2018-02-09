@@ -26,3 +26,11 @@ void Operator::add_dot(Dot *dot){
 		secondary.pop();
 	}
 }
+
+bool Operator::valid_op_char(const char &tile){
+	return validOpChars.find(tile) != validOpChars.end();
+}
+
+std::set<char> Operator::validOpChars = {
+	'+', '-', '*', '/'
+};

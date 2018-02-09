@@ -38,10 +38,13 @@ void Circuit::parse_body(){
 
 		// add operator
 		if(x >= 1 && x < width-1){ // ops are 3 chars wide {x} so can't be on edges
-			if(get_tile(y, x-1) == '{' && get_tile(y, x+1) == '}')
-				ops.push_back(Operator(Vec2(x, y), false));
-			else if(get_tile(y, x-1) == '[' && get_tile(y, x+1) == ']')
-				ops.push_back(Operator(Vec2(x, y), true));
+			// make sure this is an operator char
+			if(Operator::valid_op_char(get_tile(y, x))){
+				if(get_tile(y, x-1) == '{' && get_tile(y, x+1) == '}')
+					ops.push_back(Operator(Vec2(x, y), false));
+				else if(get_tile(y, x-1) == '[' && get_tile(y, x+1) == ']')
+					ops.push_back(Operator(Vec2(x, y), true));
+			}
 		}
 	}
 }
