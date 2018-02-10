@@ -41,9 +41,9 @@ void Circuit::parse_body(){
 			// make sure this is an operator char
 			if(Operator::valid_op_char(get_tile(y, x))){
 				if(get_tile(y, x-1) == '{' && get_tile(y, x+1) == '}')
-					ops.push_back(Operator(Vec2(x, y), false));
+					ops.push_back(Operator(Vec2(x, y), get_tile(y, x), false));
 				else if(get_tile(y, x-1) == '[' && get_tile(y, x+1) == ']')
-					ops.push_back(Operator(Vec2(x, y), true));
+					ops.push_back(Operator(Vec2(x, y), get_tile(y, x), true));
 			}
 		}
 	}

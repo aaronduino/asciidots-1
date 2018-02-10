@@ -1,8 +1,9 @@
 #include "operator.h"
 #include "dot.h"
 
-Operator::Operator(const Vec2 &pos, const bool &vertical){
+Operator::Operator(const Vec2 &pos, const char &opChar, const bool &vertical){
 	this->pos = pos;
+	this->opChar = opChar;
 	this->vertical = vertical;
 }
 
@@ -17,9 +18,16 @@ void Operator::add_dot(Dot *dot){
 
 	// release if there are pairs
 	while(primary.size() > 0 && secondary.size() > 0){
+		// just convenient
+		auto p = primary.back();
+		auto s = secondary.back();
+
 		// release primary, kill secondary
-		primary.back()->state = STATE_NONE;
-		secondary.back()->state = STATE_DEAD;
+		p->state = STATE_NONE;
+		s->state = STATE_DEAD;
+
+		// operate on values, give primary the result
+		p->value = operate(p->value, s->value);
 
 		// forget them, they're gone
 		primary.pop();
@@ -34,3 +42,18 @@ bool Operator::valid_op_char(const char &tile){
 std::set<char> Operator::validOpChars = {
 	'+', '-', '*', '/'
 };
+
+int Operator::operate(const int &lhs, const int &rhs){
+	switch(opChar){
+		case '+':
+			return lhs + rhs;
+		case '-':
+			return lhs - rhs;
+		case '*':
+			return lhs * rhs;
+		case '/':
+			return lhs / rhs;
+		default:
+			return lhs;
+	}
+}
