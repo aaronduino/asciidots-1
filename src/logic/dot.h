@@ -10,6 +10,7 @@
 #define STATE_WRITE     5
 #define STATE_DISABLED  6
 #define STATE_DEAD      7
+#define STATE_SKIP      8
 
 class Dot{
 public:

@@ -10,12 +10,9 @@ bool Circuit::step(){
 	if(dots.size() == 0)
 		return false;
 
-	// holds clones to be spawned at the end of the tick
-	std::vector<Dot*> clones;
-
 	for(uint32_t i = 0; i < dots.size(); i++){
-		// don't do anything with disabled dots
-		if(dots[i]->state == STATE_DISABLED)
+		// don't do anything with disabled or skipped dots
+		if(dots[i]->state == STATE_DISABLED || dots[i]->state == STATE_SKIP)
 			continue;
 
 		// move this dot
@@ -59,27 +56,28 @@ bool Circuit::step(){
 
 			// should we be cloning here
 			if(tile == '*'){
-				// add clones to a buffer so they're not active this step
-				clones.push_back(new Dot(*dots[i]));
-				clones[clones.size()-1]->turn(-1);
-				clones.push_back(new Dot(*dots[i]));
-				clones[clones.size()-1]->turn(1);
+				// push two new dots, turn one left the other right, skip them
+				for(int j = 0; j < 2; j++){
+					dots.push_back(new Dot(*dots[i]));
+					dots.back()->state = STATE_SKIP;
+					dots.back()->turn(j*2 - 1); // 0 = -1, 1 = 1
+				}
 			}
 		}
 	}
 
-	// remove dots with state STATE_DEAD
+	// post step processing: remove STATE_DEAD dots, activate STATE_SKIPs
 	for(uint32_t i = 0; i < dots.size(); i++){
+		// remove dead dots from the collection
 		if(dots[i]->state == STATE_DEAD){
 			dots.erase(dots.begin() + i);
 			i--;
 		}
-	}
-
-	// spawn the clones from the buffer
-	while(clones.size() > 0){
-		dots.push_back(clones[0]);
-		clones.erase(clones.begin());
+		// re-enable skipped dots
+		else if(dots[i]->state == STATE_SKIP){
+			dots[i]->state = STATE_NONE;
+			i--;
+		}
 	}
 
 	return true;
