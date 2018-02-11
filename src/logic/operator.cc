@@ -29,6 +29,9 @@ void Operator::add_dot(Dot *dot){
 		// operate on values, give primary the result
 		p->value = operate(p->value, s->value);
 
+		// primary has been released, but don't let it move this step
+		p->state = STATE_SKIP;
+
 		// forget them, they're gone
 		primary.pop();
 		secondary.pop();
