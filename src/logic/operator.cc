@@ -1,4 +1,5 @@
 #include "operator.h"
+#include <math.h>
 #include "dot.h"
 
 Operator::Operator(const Vec2 &pos, const char &opChar, const bool &vertical){
@@ -43,7 +44,7 @@ bool Operator::valid_op_char(const char &tile){
 }
 
 std::set<char> Operator::validOpChars = {
-	'+', '-', '*', '/'
+	'+', '-', '*', '/', '%', '^', '&', 'o', 'x', '>', 'G', '<', 'L', '=', '!'
 };
 
 int Operator::operate(const int &lhs, const int &rhs){
@@ -56,6 +57,28 @@ int Operator::operate(const int &lhs, const int &rhs){
 			return lhs * rhs;
 		case '/':
 			return lhs / rhs;
+		case '%':
+			return lhs % rhs;
+		case '^':
+			return pow(lhs, rhs);
+		case '&':
+			return lhs & rhs;
+		case 'o':
+			return lhs | rhs;
+		case 'x':
+			return lhs ^ rhs;
+		case '>':
+			return lhs > rhs ? 1 : 0;
+		case 'G':
+			return lhs >= rhs ? 1 : 0;
+		case '<':
+			return lhs < rhs ? 1 : 0;
+		case 'L':
+			return lhs <= rhs ? 1 : 0;
+		case '=':
+			return lhs == rhs ? 1 : 0;
+		case '!':
+			return lhs != rhs ? 1 : 0;
 		default:
 			return lhs;
 	}
