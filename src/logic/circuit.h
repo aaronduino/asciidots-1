@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <map>
 #include "dot.h"
 #include "../vec2.h"
 #include "tiles/tile.h"
@@ -16,7 +15,7 @@ public:
 	std::vector<Dot*> dots;
 
 	// collection of active tile objects
-	std::map<Vec2, Tile> tiles;
+	std::vector<Tile*> tiles;
 
 
 	// loads circuit from file into body

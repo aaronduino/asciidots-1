@@ -1,5 +1,7 @@
 #include "circuit.h"
 #include <fstream>
+#include <set>
+#include "tiles/flow.h"
 
 void Circuit::load_circuit(const std::string &path){
 	// clear body
@@ -72,13 +74,33 @@ void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
 }
 
 void Circuit::parse_body(){
+	std::set<char> flowChars = { '<', '>', '^', 'v', '\\', '/' };
+
 	// step through all tiles in reading order
 	for(uint32_t y = 0; y < height; y++) for(uint32_t x = 0; x < width; x++){
 		// this tile
 		char tile = get_tile(y, x);
-		Vec2 pos(y, x);
+		Vec2 pos(x, y);
 
 		if(tile == '.')
 			spawn_dot(y, x);
+
+		if(flowChars.find(tile) != flowChars.end())
+			tiles.push_back(new Flow(pos, tile));
 	}
+}
+
+bool Circuit::step(){
+	// step every dot
+	for(uint32_t i = 0; i < dots.size(); i++){
+		dots[i]->move();
+
+		// find an active tile at this position TODO: improve this search
+		for(uint32_t j = 0; j < tiles.size(); j++){
+			if(tiles[j]->pos == dots[i]->pos)
+				tiles[j]->add_tile(dots[i]);
+		}
+	}
+
+	return true;
 }
