@@ -93,12 +93,34 @@ void Circuit::parse_body(){
 bool Circuit::step(){
 	// step every dot
 	for(uint32_t i = 0; i < dots.size(); i++){
+		// don't step disabled or skip dots
+		if(dots[i]->state == STATE_DISABLED || dots[i]->state == STATE_SKIP)
+			continue;
+
 		dots[i]->move();
+
+		// what tile did it land on
+		char tile = get_tile(dots[i]->pos.y, dots[i]->pos.x);
+
+		// check for deaths
+		if(tile == ' ' || !valid_travel(tile, dots[i]->dir)){
+			dots[i]->state = STATE_DEAD;
+			continue;
+		}
 
 		// find an active tile at this position TODO: improve this search
 		for(uint32_t j = 0; j < tiles.size(); j++){
 			if(tiles[j]->pos == dots[i]->pos)
 				tiles[j]->add_tile(dots[i]);
+		}
+	}
+
+	// kill dots with STATE_DEAD
+	for(uint32_t i = 0; i < dots.size(); i++){
+		if(dots[i]->state == STATE_DEAD){
+			delete dots[i];
+			dots.erase(dots.begin() + i);
+			i--;
 		}
 	}
 
