@@ -2,6 +2,7 @@
 #include <fstream>
 #include <set>
 #include "tiles/flow.h"
+#include "tiles/clone.h"
 
 void Circuit::load_circuit(const std::string &path){
 	// clear body
@@ -85,8 +86,11 @@ void Circuit::parse_body(){
 		if(tile == '.')
 			spawn_dot(y, x);
 
-		if(flowChars.find(tile) != flowChars.end())
+		else if(flowChars.find(tile) != flowChars.end())
 			tiles.push_back(new Flow(pos, tile));
+
+		else if(tile == '*')
+			tiles.push_back(new Clone(pos));
 	}
 }
 
@@ -97,6 +101,7 @@ bool Circuit::step(){
 		if(dots[i]->state == STATE_DISABLED || dots[i]->state == STATE_SKIP)
 			continue;
 
+		// take a step
 		dots[i]->move();
 
 		// what tile did it land on
@@ -109,14 +114,35 @@ bool Circuit::step(){
 		// find an active tile at this position TODO: improve this search
 		for(uint32_t j = 0; j < tiles.size(); j++){
 			if(tiles[j]->pos == dots[i]->pos)
-				tiles[j]->add_tile(dots[i]);
+				tiles[j]->add_dot(dots[i]);
 		}
+	}
 
+	// post-step state tasks
+	for(uint32_t i = 0; i < dots.size(); i++){
 		// if the dot died this step, remove it
-		if(dots[i]->state == STATE_DEAD){
-			delete dots[i];
-			dots.erase(dots.begin() + i);
-			i--;
+		switch(dots[i]->state){
+			// remove dots that died this step
+			case STATE_DEAD:
+				delete dots[i];
+				dots.erase(dots.begin() + i);
+				i--;
+				break;
+
+			// spawn dots for dots that cloned this step
+			case STATE_CLONE:
+				// spawn two dots, turn one left, one right, have them skipped
+				for(int j = 0; j < 2; j++){
+					dots.push_back(new Dot(*dots[i]));
+					dots.back()->state = STATE_SKIP;
+					dots.back()->turn(j*2 - 1); // 0 = -1, 1 = 1
+				}
+				break;
+
+			// remove skip tags, skips are only for the step they're set within
+			case STATE_SKIP:
+				dots[i]->state = STATE_NONE;
+				break;
 		}
 	}
 

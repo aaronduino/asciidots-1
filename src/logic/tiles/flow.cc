@@ -6,7 +6,7 @@ Flow::Flow(const Vec2 &pos, const char &tileChar) : Tile(pos){
 	this->tileChar = tileChar;
 }
 
-void Flow::add_tile(Dot *dot){
+void Flow::add_dot(Dot *dot){
 	switch(tileChar){
 		case '<':
 			dot->dir = Vec2(-1, 0);

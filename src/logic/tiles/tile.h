@@ -12,5 +12,5 @@ public:
 	// ensure pos is always set at construction
 	Tile(const Vec2 &p) : pos(p) {}
 
-	virtual void add_tile(Dot *dot) = 0;
+	virtual void add_dot(Dot *dot) = 0;
 };

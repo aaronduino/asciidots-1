@@ -1,6 +1,5 @@
 #pragma once
 #include "tile.h"
-//#include "../../vec2.h"
 
 // a tile that affects a dot's direction of travel
 // tileChars include: < > ^ v \ /
@@ -12,5 +11,5 @@ public:
 
 	Flow(const Vec2 &pos, const char &tileChar);
 
-	void add_tile(Dot *dot);
+	void add_dot(Dot *dot);
 };

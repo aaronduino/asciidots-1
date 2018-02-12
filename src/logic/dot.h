@@ -11,6 +11,7 @@
 #define STATE_DISABLED  6
 #define STATE_DEAD      7
 #define STATE_SKIP      8
+#define STATE_CLONE     9
 
 class Dot{
 public:
