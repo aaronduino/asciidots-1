@@ -6,10 +6,12 @@
 class Flow: public Tile{
 public:
 	Vec2 pos;
-	// lots of flow characters, keeps track of this one's
-	char tileChar;
-
+	
 	Flow(const Vec2 &pos, const char &tileChar);
 
 	void add_dot(Dot *dot);
+
+private:
+	// lots of flow characters, keeps track of this one's
+	char tileChar;
 };
