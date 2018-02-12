@@ -44,7 +44,7 @@ bool Operator::valid_op_char(const char &tile){
 }
 
 std::set<char> Operator::validOpChars = {
-	'+', '-', '*', '/', '%', '^', '&', 'o', 'x', '>', 'G', '<', 'L', '=', '!'
+	'+','-','*','/','%','&','|','^','>','G','<','L','=','!'
 };
 
 int Operator::operate(const int &lhs, const int &rhs){
@@ -59,13 +59,11 @@ int Operator::operate(const int &lhs, const int &rhs){
 			return lhs / rhs;
 		case '%':
 			return lhs % rhs;
-		case '^':
-			return pow(lhs, rhs);
 		case '&':
 			return lhs & rhs;
-		case 'o':
+		case '|':
 			return lhs | rhs;
-		case 'x':
+		case '^':
 			return lhs ^ rhs;
 		case '>':
 			return lhs > rhs ? 1 : 0;
