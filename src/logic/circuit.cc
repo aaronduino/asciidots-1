@@ -32,18 +32,23 @@ void Circuit::load_circuit(const std::string &path){
 void Circuit::parse_body(){
 	// scan
 	for(uint32_t y = 0; y < height; y++) for(uint32_t x = 0; x < width; x++){
+		// convenience
+		char tile = get_tile(y, x);
+
 		// dot spawn
-		if(get_tile(y, x) == '.')
+		if(tile == '.')
 			spawn_dot(y, x);
 
 		// add operator
 		if(x >= 1 && x < width-1){ // ops are 3 chars wide {x} so can't be on edges
 			// make sure this is an operator char
-			if(Operator::valid_op_char(get_tile(y, x))){
-				if(get_tile(y, x-1) == '{' && get_tile(y, x+1) == '}')
-					ops.push_back(Operator(Vec2(x, y), get_tile(y, x), false));
-				else if(get_tile(y, x-1) == '[' && get_tile(y, x+1) == ']')
-					ops.push_back(Operator(Vec2(x, y), get_tile(y, x), true));
+			if(Operator::valid_op_char(tile)){
+				char left = get_tile(y, x-1), right = get_tile(y, x+1);
+
+				if(left == '{' && right == '}')
+					ops.push_back(Operator(Vec2(x, y), tile, false));
+				else if(left == '[' && right == ']')
+					ops.push_back(Operator(Vec2(x, y), tile, true));
 			}
 		}
 	}
