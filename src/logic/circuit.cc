@@ -1,10 +1,6 @@
 #include "circuit.h"
 #include <fstream>
 
-/*
- * contains general methods and initialisation of the Circuit class
- */
-
 void Circuit::load_circuit(const std::string &path){
 	// clear body
 	body = std::vector<std::string>();
@@ -29,29 +25,26 @@ void Circuit::load_circuit(const std::string &path){
 	parse_body();
 }
 
-void Circuit::parse_body(){
-	// scan
-	for(uint32_t y = 0; y < height; y++) for(uint32_t x = 0; x < width; x++){
-		// convenience
-		char tile = get_tile(y, x);
+char Circuit::get_tile(const int64_t &y, const int64_t &x){
+	std::string row = body[y];
 
-		// dot spawn
-		if(tile == '.')
-			spawn_dot(y, x);
+	// if out of bounds, return ' '
+	if(x >= (int64_t)row.length() || x < 0 || y >= (int64_t)height || y < 0)
+		return ' ';
+	else
+		return row[x];
+}
 
-		// add operator
-		if(x >= 1 && x < width-1){ // ops are 3 chars wide {x} so can't be on edges
-			// make sure this is an operator char
-			if(Operator::valid_op_char(tile)){
-				char left = get_tile(y, x-1), right = get_tile(y, x+1);
-
-				if(left == '{' && right == '}')
-					ops.push_back(Operator(Vec2(x, y), tile, false));
-				else if(left == '[' && right == ']')
-					ops.push_back(Operator(Vec2(x, y), tile, true));
-			}
-		}
-	}
+// assumes legal travel, returns false if illegal
+bool Circuit::valid_travel(const char &tile, const Vec2 &dir){
+	// moving vertical, entering a horizontal?
+	if(dir.x == 0 && (tile == '-' || tile == '(' || tile == ')'))
+			return false;
+	// moving horizontal, entering a vertical?
+	else if(dir.y == 0 && tile == '|')
+		return false;
+	else
+		return true;
 }
 
 void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
@@ -78,24 +71,6 @@ void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
 		dots.push_back(new Dot(Vec2(x, y), exits[0]));
 }
 
-char Circuit::get_tile(const int64_t &y, const int64_t &x){
-	std::string row = body[y];
-
-	// if out of bounds, return ' '
-	if(x >= (int64_t)row.length() || x < 0 || y >= (int64_t)height || y < 0)
-		return ' ';
-	else
-		return row[x];
-}
-
-// assumes legal travel, false if illegal
-bool Circuit::valid_travel(const char &tile, const Vec2 &dir){
-	// moving vertical, entering a horizontal?
-	if(dir.x == 0 && (tile == '-' || tile == '(' || tile == ')'))
-			return false;
-	// moving horizontal, entering a vertical?
-	else if(dir.y == 0 && tile == '|')
-		return false;
-	else
-		return true;
+void Circuit::parse_body(){
+	
 }
