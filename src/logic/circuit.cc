@@ -72,5 +72,13 @@ void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
 }
 
 void Circuit::parse_body(){
-	
+	// step through all tiles in reading order
+	for(uint32_t y = 0; y < height; y++) for(uint32_t x = 0; x < width; x++){
+		// this tile
+		char tile = get_tile(y, x);
+		Vec2 pos(y, x);
+
+		if(tile == '.')
+			spawn_dot(y, x);
+	}
 }
