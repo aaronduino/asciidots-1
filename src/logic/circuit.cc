@@ -6,6 +6,7 @@
 #include "tiles/clone.h"
 #include "tiles/read.h"
 #include "tiles/write.h"
+#include "tiles/operator.h"
 
 void Circuit::load_circuit(const std::string &path){
   // clear body
@@ -80,6 +81,7 @@ void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
 void Circuit::parse_body(){
   std::set<char> flowChars = { '<', '>', '^', 'v', '\\', '/' };
   std::set<char> readChars = { '#', '@' };
+  std::set<char> operators = { '+','-','*','/','%','&','|','^','=','!' };
 
   // step through all tiles in reading order
   for(uint32_t y = 0; y < height; y++) for(uint32_t x = 0; x < width; x++){
@@ -89,6 +91,19 @@ void Circuit::parse_body(){
 
     if(tile == '.')
       spawn_dot(y, x);
+
+    else if(
+      get_tile(y, x-1) == '{' &&
+      get_tile(y, x+1) == '}' &&
+      operators.find(tile) != operators.end()){
+        tiles.push_back(new Operator(pos, tile, false));
+    }
+    else if(
+      get_tile(y, x-1) == '[' &&
+      get_tile(y, x+1) == ']' &&
+      operators.find(tile) != operators.end()){
+        tiles.push_back(new Operator(pos, tile, true));
+    }
 
     else if(flowChars.find(tile) != flowChars.end())
       tiles.push_back(new Flow(pos, tile));
