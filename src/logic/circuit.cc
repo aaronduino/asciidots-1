@@ -130,7 +130,6 @@ void Circuit::post_step(){
     // if the dot died this step, remove it
     // remove dots that died this step
     if(dots[i]->state == STATE_DEAD){
-      delete dots[i];
       dots.erase(dots.begin() + i);
       i--;
     }
