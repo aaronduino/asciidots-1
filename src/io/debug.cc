@@ -9,7 +9,7 @@ Debug::Debug(){
 
   // windows
   wcircuit = newwin(6, 25, 0, 0);
-  woutput = newwin(5, 25, 6, 0);
+  woutput = newwin(10, 25, 6, 0);
 
   // colours
   start_color();

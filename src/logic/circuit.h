@@ -39,6 +39,9 @@ public:
   // perform post-step processing, usually handing states
   void post_step();
 
+  // handle loading in/spitting out chars when in read/write states
+  void process_io(Dot *dot, const char &tile);
+
 private:
   // working section of the circuit
   std::vector<std::string> body;

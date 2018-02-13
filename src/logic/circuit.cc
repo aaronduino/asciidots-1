@@ -3,6 +3,7 @@
 #include <set>
 #include "tiles/flow.h"
 #include "tiles/clone.h"
+#include "tiles/read.h"
 
 void Circuit::load_circuit(const std::string &path){
   // clear body
@@ -76,6 +77,7 @@ void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
 
 void Circuit::parse_body(){
   std::set<char> flowChars = { '<', '>', '^', 'v', '\\', '/' };
+  std::set<char> readChars = { '#', '@' };
 
   // step through all tiles in reading order
   for(uint32_t y = 0; y < height; y++) for(uint32_t x = 0; x < width; x++){
@@ -91,6 +93,9 @@ void Circuit::parse_body(){
 
     else if(tile == '*')
       tiles.push_back(new Clone(pos));
+
+    else if(readChars.find(tile) != readChars.end())
+      tiles.push_back(new Read(pos, tile));
   }
 }
 
@@ -106,6 +111,13 @@ bool Circuit::step(){
 
     // what tile did it land on
     char tile = get_tile(dots[i]->pos.y, dots[i]->pos.x);
+
+    // handle reading/writing states
+    process_io(dots[i], tile);
+
+    // don't process the tile if it's for IO
+    if(dots[i]->state == STATE_READVALUE || dots[i]->state == STATE_READID)
+      continue;
 
     // check for deaths
     if(tile == ' ' || !valid_travel(tile, dots[i]->dir))
@@ -147,5 +159,41 @@ void Circuit::post_step(){
     // remove skip tags, skips are only for the step they're set within
     else if(dots[i]->state == STATE_SKIP)
       dots[i]->state = STATE_NONE;
+  }
+}
+
+void Circuit::process_io(Dot *dot, const char &tile){
+  std::set<int> readStates = {
+    STATE_HASH, STATE_AT, STATE_READVALUE, STATE_READID
+  };
+
+  // reading
+  if(readStates.find(dot->state) != readStates.end()){
+    // is this tile a digit
+    bool isDigit = tile >= '0' && tile <= '9';  
+
+    // last tile was # or @. ensures value/id is only cleared if this is a digit
+    if(isDigit){
+      if(dot->state == STATE_HASH){
+        dot->state = STATE_READVALUE;
+        dot->value = 0;
+      }
+      else if(dot->state == STATE_AT){
+        dot->state = STATE_READID;
+        dot->id = 0;
+      }
+
+      // if we're in a READVALUE or READID state, push this digit onto value/id
+      if(dot->state == STATE_READVALUE){
+        dot->value *= 10;
+        dot->value += tile - '0';
+      }
+      else if(dot->state == STATE_READID){
+        dot->id *= 10;
+        dot->id += tile - '0';
+      }
+    }
+    else
+      dot->state = STATE_NONE;
   }
 }
