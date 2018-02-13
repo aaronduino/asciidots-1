@@ -6,11 +6,11 @@ class Dot;
 
 class Tile{
 public:
-	// local position of this tile within its circuit
-	Vec2 pos;
+  // local position of this tile within its circuit
+  Vec2 pos;
 
-	// ensure pos is always set at construction
-	Tile(const Vec2 &p) : pos(p) {}
+  // ensure pos is always set at construction
+  Tile(const Vec2 &p) : pos(p) {}
 
-	virtual void add_dot(Dot *dot) = 0;
+  virtual void add_dot(Dot *dot) = 0;
 };

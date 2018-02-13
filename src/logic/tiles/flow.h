@@ -5,13 +5,13 @@
 // tileChars include: < > ^ v \ /
 class Flow: public Tile{
 public:
-	Vec2 pos;
-	
-	Flow(const Vec2 &pos, const char &tileChar);
+  Vec2 pos;
+  
+  Flow(const Vec2 &pos, const char &tileChar);
 
-	void add_dot(Dot *dot);
+  void add_dot(Dot *dot);
 
 private:
-	// lots of flow characters, keeps track of this one's
-	char tileChar;
+  // lots of flow characters, keeps track of this one's
+  char tileChar;
 };
