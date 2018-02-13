@@ -7,6 +7,7 @@
 #include "tiles/read.h"
 #include "tiles/write.h"
 #include "tiles/operator.h"
+#include "tiles/branch.h"
 
 void Circuit::load_circuit(const std::string &path){
   // clear body
@@ -104,6 +105,9 @@ void Circuit::parse_body(){
       operators.find(tile) != operators.end()){
         tiles.push_back(new Operator(pos, tile, true));
     }
+
+    else if(tile == '~')
+      tiles.push_back(new Branch(pos));
 
     else if(flowChars.find(tile) != flowChars.end())
       tiles.push_back(new Flow(pos, tile));
