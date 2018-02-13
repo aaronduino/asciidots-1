@@ -154,6 +154,7 @@ void Circuit::post_step(){
         dots.back()->state = STATE_SKIP;
         dots.back()->turn(j*2 - 1); // 0 = -1, 1 = 1
       }
+      dots[i]->state = STATE_NONE;
     }
 
     // remove skip tags, skips are only for the step they're set within
