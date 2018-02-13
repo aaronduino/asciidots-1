@@ -118,33 +118,35 @@ bool Circuit::step(){
 		}
 	}
 
+	// post step processing
+	post_step();
+
+	return true; // activity occurred this step TODO: don't fake this
+}
+
+void Circuit::post_step(){
 	// post-step state tasks
 	for(uint32_t i = 0; i < dots.size(); i++){
 		// if the dot died this step, remove it
-		switch(dots[i]->state){
-			// remove dots that died this step
-			case STATE_DEAD:
-				delete dots[i];
-				dots.erase(dots.begin() + i);
-				i--;
-				break;
-
-			// spawn dots for dots that cloned this step
-			case STATE_CLONE:
-				// spawn two dots, turn one left, one right, have them skipped
-				for(int j = 0; j < 2; j++){
-					dots.push_back(new Dot(*dots[i]));
-					dots.back()->state = STATE_SKIP;
-					dots.back()->turn(j*2 - 1); // 0 = -1, 1 = 1
-				}
-				break;
-
-			// remove skip tags, skips are only for the step they're set within
-			case STATE_SKIP:
-				dots[i]->state = STATE_NONE;
-				break;
+		// remove dots that died this step
+		if(dots[i]->state == STATE_DEAD){
+			delete dots[i];
+			dots.erase(dots.begin() + i);
+			i--;
 		}
-	}
 
-	return true;
+		// spawn dots for dots that cloned this step
+		else if(dots[i]->state == STATE_CLONE){
+			// spawn two dots, turn one left, one right, have them skipped
+			for(int j = 0; j < 2; j++){
+				dots.push_back(new Dot(*dots[i]));
+				dots.back()->state = STATE_SKIP;
+				dots.back()->turn(j*2 - 1); // 0 = -1, 1 = 1
+			}
+		}
+
+		// remove skip tags, skips are only for the step they're set within
+		if(dots[i]->state == STATE_SKIP)
+			dots[i]->state = STATE_NONE;
+	}
 }

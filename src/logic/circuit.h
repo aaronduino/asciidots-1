@@ -36,6 +36,9 @@ public:
 	// move and process all dots once, returns true if stuff happens
 	bool step();
 
+	// perform post-step processing, usually handing states
+	void post_step();
+
 private:
 	// working section of the circuit
 	std::vector<std::string> body;
