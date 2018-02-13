@@ -1,9 +1,11 @@
 #include "circuit.h"
 #include <fstream>
 #include <set>
+#include "../io/io.h"
 #include "tiles/flow.h"
 #include "tiles/clone.h"
 #include "tiles/read.h"
+#include "tiles/write.h"
 
 void Circuit::load_circuit(const std::string &path){
   // clear body
@@ -96,6 +98,9 @@ void Circuit::parse_body(){
 
     else if(readChars.find(tile) != readChars.end())
       tiles.push_back(new Read(pos, tile));
+
+    else if(tile == '$')
+      tiles.push_back(new Write(pos));
   }
 }
 
@@ -196,5 +201,12 @@ void Circuit::process_io(Dot *dot, const char &tile){
     }
     else
       dot->state = STATE_NONE;
+  }
+  // writing
+  else if(dot->state == STATE_WRITE){
+    if(tile == '#')
+      output(std::to_string(dot->value));
+    else if(tile == '@')
+      output(std::to_string(dot->id));
   }
 }
