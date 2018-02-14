@@ -11,15 +11,12 @@ int main(int argc, char **argv){
   Circuit circuit;
   circuit.load_circuit(argv[1]);
 
-  // init new debugger
   Debug debug;
 
-  // loop until circuit reports stability
-  while(circuit.step()){
+  while(circuit.step()){ // loop until circuit reports stability
     debug.draw(circuit); // draw circuit
 
-    // pause for a moment
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100)); // wait a bit
   }
 
   return EXIT_SUCCESS;

@@ -4,6 +4,9 @@
 // forward dec
 class Dot;
 
+/* base class for all tile objects
+   children must implement add_dot method which is called when dots arrive here
+   tiles remember their local position for testing arrival */
 class Tile{
 public:
   // local position of this tile within its circuit

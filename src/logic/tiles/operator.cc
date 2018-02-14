@@ -3,7 +3,6 @@
 
 Operator::Operator(const Vec2 &pos, const char &opChar, const bool &vertical):
 Tile(pos){
-  this->pos = pos;
   this->opChar = opChar;
   this->vertical = vertical;
 }
@@ -11,29 +10,20 @@ Tile(pos){
 void Operator::add_dot(Dot *dot){
   dot->state = STATE_DISABLED;
 
-  // dot isn't parallel to operator
-  if(vertical ^ (dot->dir.x == 0))
+  if(vertical ^ (dot->dir.x == 0)) // dot isn't parallel to operator
     secondary.push(dot);
   else
     primary.push(dot);
 
-  // release if there are pairs
-  while(primary.size() > 0 && secondary.size() > 0){
-    // just convenient
-    auto p = primary.back();
+  while(primary.size() > 0 && secondary.size() > 0){ // if there's a pair
+    auto p = primary.back(); // convenience
     auto s = secondary.back();
 
-    // release primary, kill secondary
-    p->state = STATE_NONE;
-    s->state = STATE_DEAD;
+    p->state = STATE_NONE; // release primary but don't let it move this step
+    s->state = STATE_DEAD; // kill secondary
 
-    // operate on values, give primary the result
-    p->value = operate(p->value, s->value);
+    p->value = operate(p->value, s->value); // operate on vals, give p result
 
-    // primary has been released, but don't let it move this step
-    p->state = STATE_SKIP;
-
-    // forget them, they're gone
     primary.pop();
     secondary.pop();
   }
@@ -42,33 +32,33 @@ void Operator::add_dot(Dot *dot){
 int Operator::operate(const int &lhs, const int &rhs){
 	switch(opChar){
 		case '+':
-			return lhs + rhs;
+			return lhs + rhs; // add
 		case '-':
-			return lhs - rhs;
+			return lhs - rhs; // sub
 		case '*':
-			return lhs * rhs;
+			return lhs * rhs; // mult
 		case '/':
-			return lhs / rhs;
+			return lhs / rhs; // div
 		case '%':
-			return lhs % rhs;
+			return lhs % rhs; // mod
 		case '&':
-			return lhs & rhs;
+			return lhs & rhs; // AND
 		case '|':
-			return lhs | rhs;
+			return lhs | rhs; // OR
 		case '^':
-			return lhs ^ rhs;
+			return lhs ^ rhs; // XOR
 		case '>':
-			return lhs > rhs ? 1 : 0;
+			return lhs > rhs ? 1 : 0; // greater than
 		case 'G':
-			return lhs >= rhs ? 1 : 0;
+			return lhs >= rhs ? 1 : 0; // greater than or equal
 		case '<':
-			return lhs < rhs ? 1 : 0;
+			return lhs < rhs ? 1 : 0; // less than
 		case 'L':
-			return lhs <= rhs ? 1 : 0;
+			return lhs <= rhs ? 1 : 0; // less than or equal
 		case '=':
-			return lhs == rhs ? 1 : 0;
+			return lhs == rhs ? 1 : 0; // equal
 		case '!':
-			return lhs != rhs ? 1 : 0;
+			return lhs != rhs ? 1 : 0; // not equal
 		default:
 			return lhs;
 	}

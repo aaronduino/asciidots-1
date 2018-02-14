@@ -5,44 +5,22 @@
 #include "../vec2.h"
 #include "tiles/tile.h"
 
-// implementation split between circuit.cc and processing.cc
 class Circuit{
 public:
-  // bounds
-  uint32_t width, height;
+  uint32_t width, height; // bounds in tiles
 
-  // dot collection
-  std::vector<Dot*> dots;
+  std::vector<Dot*> dots; // dot collection
+  std::vector<Tile*> tiles; // tiles that actually do things
 
-  // collection of active tile objects
-  std::vector<Tile*> tiles;
-
-
-  // loads circuit from file into body
-  void load_circuit(const std::string &path);
-
-  // returns a tile char, if out of bounds returns whitespace
-  char get_tile(const int64_t &y, const int64_t &x);	
-
-  // can this tile legally be entered in this direction
-  bool valid_travel(const char &tile, const Vec2 &dir);
-
-  // attempt to spawn a dot here
+  void load_circuit(const std::string &path); // load circuit from file
+  char get_tile(const int64_t &y, const int64_t &x);
+  bool valid_travel(const char &tile, const Vec2 &dir); // can enter tile in dir
   void spawn_dot(const uint32_t &y, const uint32_t &x);
-
-    // scans body for things to initialise, calls appropriate handlers
-  void parse_body();
-
-  // move and process all dots once, returns true if stuff happens
-  bool step();
-
-  // perform post-step processing, usually handing states
-  void post_step();
-
-  // handle loading in/spitting out chars when in read/write states
-  void process_io(Dot *dot, const char &tile);
+  void parse_body(); // scan the body for interesting tiles, create objects
+  bool step(); // move all dots, process all interesting tiles
+  void post_step(); // handle business after every dot has stepped
+  void process_io(Dot *dot, const char &tile); // handle any reading/writing
 
 private:
-  // working section of the circuit
-  std::vector<std::string> body;
+  std::vector<std::string> body; // payload of the circuit file
 };

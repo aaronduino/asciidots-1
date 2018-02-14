@@ -2,13 +2,11 @@
 #include "../dot.h"
 
 Read::Read(const Vec2 &pos, const char &readType): Tile(pos){
-  this->pos = pos;
   this->readType = readType;
 }
 
 void Read::add_dot(Dot *dot){
-  // must be in neutral to begin reading
-  if(dot->state == STATE_NONE){
+  if(dot->state == STATE_NONE){ // dots must be in default state to start a read
     if(readType == '#')
       dot->state = STATE_HASH;
     else if(readType == '@')

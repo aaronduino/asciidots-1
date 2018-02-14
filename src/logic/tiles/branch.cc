@@ -1,35 +1,26 @@
 #include "branch.h"
 #include "../dot.h"
 
-Branch::Branch(const Vec2 &pos): Tile(pos){
-  this->pos = pos;
-}
+Branch::Branch(const Vec2 &pos): Tile(pos) {}
 
 void Branch::add_dot(Dot *dot){
-  dot->state = STATE_DISABLED;
+  dot->state = STATE_DISABLED; // capture this dot here
 
   if(dot->dir.x == 0)
-    secondary.push(dot);
+    secondary.push(dot); // vertical
   else
-    primary.push(dot);
+    primary.push(dot); // horizontal
 
   while(primary.size() > 0 && secondary.size() > 0){
-    // just convenient
-    auto p = primary.back();
+    auto p = primary.back(); // convenience
     auto s = secondary.back();
 
-    // release primary, kill secondary
-    p->state = STATE_NONE;
-    s->state = STATE_DEAD;
+    p->state = STATE_SKIP; // release primary but don't move until next step
+    s->state = STATE_DEAD; // kill secondary
 
-    // if secondary's value is 0, transfer its direction
-    if(s->value == 0)
-      p->dir = s->dir;
+    if(s->value == 0) // if secondary (vertical) value is 0
+      p->dir = s->dir; // redirect primary to secondary's direction
 
-    // primary has been released, but don't let it move this step
-    p->state = STATE_SKIP;
-
-    // forget them, they're gone
     primary.pop();
     secondary.pop();
   }

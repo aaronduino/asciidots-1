@@ -10,8 +10,7 @@
 #include "tiles/branch.h"
 
 void Circuit::load_circuit(const std::string &path){
-  // clear body
-  body = std::vector<std::string>();
+  body = std::vector<std::string>(); // clear body
 
   std::ifstream file(path);
   std::string line;
@@ -29,8 +28,7 @@ void Circuit::load_circuit(const std::string &path){
 
   file.close();
 
-  // init body
-  parse_body();
+  parse_body(); // init body
 }
 
 char Circuit::get_tile(const int64_t &y, const int64_t &x){
@@ -56,7 +54,7 @@ bool Circuit::valid_travel(const char &tile, const Vec2 &dir){
 }
 
 void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
-  // find a direction for the dot to spawn pointing
+  // find a direction for the spawned dot to point
   Vec2 compass[4] = { Vec2(0, -1), Vec2(1, 0), Vec2(0, 1), Vec2(-1, 0) };
   std::vector<Vec2> exits;
   for(int i = 0; i < 4; i++){
@@ -69,14 +67,12 @@ void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
     if(tile == ' ') // empty space isn't an exit
       continue;
 
-    // only an exit if we can legally go this way
-    if(valid_travel(tile, compass[i]))
-      exits.push_back(compass[i]);
+    if(valid_travel(tile, compass[i])) // if we can legally leave this way
+      exits.push_back(compass[i]); // it's an exit
   }
 
-  // only spawn if there's a possible unambiguous exit
-  if(exits.size() == 1)
-    dots.push_back(new Dot(Vec2(x, y), exits[0]));
+  if(exits.size() == 1) // must only be one unambiguous exit
+    dots.push_back(new Dot(Vec2(x, y), exits[0])); // spawn dot pointing there
 }
 
 void Circuit::parse_body(){
@@ -86,76 +82,72 @@ void Circuit::parse_body(){
 
   // step through all tiles in reading order
   for(uint32_t y = 0; y < height; y++) for(uint32_t x = 0; x < width; x++){
-    // this tile
-    char tile = get_tile(y, x);
+    char tile = get_tile(y, x); // convenience
     Vec2 pos(x, y);
 
-    if(tile == '.')
+    if(tile == '.') // spawns
       spawn_dot(y, x);
 
     else if(
-      get_tile(y, x-1) == '{' &&
+      get_tile(y, x-1) == '{' && // horizontal operators
       get_tile(y, x+1) == '}' &&
       operators.find(tile) != operators.end()){
         tiles.push_back(new Operator(pos, tile, false));
     }
     else if(
-      get_tile(y, x-1) == '[' &&
+      get_tile(y, x-1) == '[' && // vertical operators
       get_tile(y, x+1) == ']' &&
       operators.find(tile) != operators.end()){
         tiles.push_back(new Operator(pos, tile, true));
     }
 
-    else if(tile == '~')
+    else if(tile == '~') // branches
       tiles.push_back(new Branch(pos));
 
-    else if(flowChars.find(tile) != flowChars.end())
+    else if(flowChars.find(tile) != flowChars.end()) // flow chars
       tiles.push_back(new Flow(pos, tile));
 
-    else if(tile == '*')
+    else if(tile == '*') // clones
       tiles.push_back(new Clone(pos));
 
-    else if(readChars.find(tile) != readChars.end())
+    else if(readChars.find(tile) != readChars.end()) // read chars
       tiles.push_back(new Read(pos, tile));
 
-    else if(tile == '$')
+    else if(tile == '$') // write
       tiles.push_back(new Write(pos));
   }
 }
 
 bool Circuit::step(){
-  // step every dot
-  for(uint32_t i = 0; i < dots.size(); i++){
+  for(uint32_t i = 0; i < dots.size(); i++){ // step each dot
     // don't step disabled or skip dots
     if(dots[i]->state == STATE_DISABLED || dots[i]->state == STATE_SKIP)
       continue;
 
-    // take a step
-    dots[i]->move();
+    dots[i]->move(); // move the dot forward
 
     // what tile did it land on
     char tile = get_tile(dots[i]->pos.y, dots[i]->pos.x);
 
-    // handle reading/writing states
-    process_io(dots[i], tile);
+    process_io(dots[i], tile); // handle reading/writing states
 
-    // don't process the tile if it's for IO
+    // don't process the tile if it did IO this step
     if(dots[i]->state == STATE_READVALUE || dots[i]->state == STATE_READID)
       continue;
 
-    // check for deaths
-    if(tile == ' ' || !valid_travel(tile, dots[i]->dir))
+    if(tile == ' ' || !valid_travel(tile, dots[i]->dir)){ // check for deaths
       dots[i]->state = STATE_DEAD;
+      continue;
+    }
 
     // find an active tile at this position TODO: improve this search
     for(uint32_t j = 0; j < tiles.size(); j++){
       if(tiles[j]->pos == dots[i]->pos)
-        tiles[j]->add_dot(dots[i]);
+        tiles[j]->add_dot(dots[i]); // pass the dot to the tile here
     }
   }
 
-  // post step processing
-  post_step();
+  post_step(); // post step processing
 
   return true; // activity occurred this step TODO: don't fake this
 }
@@ -163,14 +155,12 @@ bool Circuit::step(){
 void Circuit::post_step(){
   // post-step state tasks
   for(uint32_t i = 0; i < dots.size(); i++){
-    // if the dot died this step, remove it
-    // remove dots that died this step
-    if(dots[i]->state == STATE_DEAD){
+    if(dots[i]->state == STATE_DEAD){ // if the dot died this step, remove it
       dots.erase(dots.begin() + i);
-      i--;
+      i--; // elements all moved down a space, so step back
     }
 
-    // spawn dots for dots that cloned this step
+    // spawn clones if necessary
     else if(dots[i]->state == STATE_CLONE){
       // spawn two dots, turn one left, one right, have them skipped
       for(int j = 0; j < 2; j++){
@@ -178,12 +168,11 @@ void Circuit::post_step(){
         dots.back()->state = STATE_SKIP;
         dots.back()->turn(j*2 - 1); // 0 = -1, 1 = 1
       }
-      dots[i]->state = STATE_NONE;
+      dots[i]->state = STATE_NONE; // clones spawned, no more please
     }
 
-    // remove skip tags, skips are only for the step they're set within
-    else if(dots[i]->state == STATE_SKIP)
-      dots[i]->state = STATE_NONE;
+    else if(dots[i]->state == STATE_SKIP) // remove skip states
+      dots[i]->state = STATE_NONE; // they're only effective within their step
   }
 }
 
@@ -194,11 +183,9 @@ void Circuit::process_io(Dot *dot, const char &tile){
 
   // reading
   if(readStates.find(dot->state) != readStates.end()){
-    // is this tile a digit
-    bool isDigit = tile >= '0' && tile <= '9';  
+    bool isDigit = tile >= '0' && tile <= '9';   // is this tile a digit
 
-    // last tile was # or @. ensures value/id is only cleared if this is a digit
-    if(isDigit){
+    if(isDigit){ // only clear values and start a read if tile is a digit
       if(dot->state == STATE_HASH){
         dot->state = STATE_READVALUE;
         dot->value = 0;
@@ -208,7 +195,7 @@ void Circuit::process_io(Dot *dot, const char &tile){
         dot->id = 0;
       }
 
-      // if we're in a READVALUE or READID state, push this digit onto value/id
+      // if we're in a READVALUE/READID state, push this digit onto value/id
       if(dot->state == STATE_READVALUE){
         dot->value *= 10;
         dot->value += tile - '0';
@@ -218,9 +205,10 @@ void Circuit::process_io(Dot *dot, const char &tile){
         dot->id += tile - '0';
       }
     }
-    else
+    else // tile not a digit, disable any reading modes
       dot->state = STATE_NONE;
   }
+  
   // writing
   else if(dot->state == STATE_WRITE){
     if(tile == '#')

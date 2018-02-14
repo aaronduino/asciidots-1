@@ -1,10 +1,9 @@
 #pragma once
 
-// integer order 2 vector
+// vector of two integers: x and y
 struct Vec2{
 public:
-  // values
-  int x, y;
+  int x, y; // values
 
   Vec2(const int &value = 0);
   Vec2(const int &xValue, const int &yValue);

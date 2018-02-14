@@ -15,21 +15,14 @@
 
 class Dot{
 public:
-  // vector position and normalised direction
-  Vec2 pos, dir;
-  // track state between ticks
-  int state = STATE_NONE;
-
-  // value and ID init to 0
-  int value = 0;
-  int id = 0;
+  Vec2 pos, dir; // local position and normalised direction
+  int state = STATE_NONE; // remember state between steps
+  int value = 0; // can be read/written/processed
+  int id = 0; // can be read/written but not processed
 
   Dot(Vec2 pos, Vec2 dir);
   Dot(const Dot &dot); // clone constructor
 
-  // take one step forward
-  void move();
-
-  // turn positive or negative multiples of 90 degrees
-  void turn(int turns);
+  void move(); // take one step forward
+  void turn(int turns); // turn in multiples of right angles
 };

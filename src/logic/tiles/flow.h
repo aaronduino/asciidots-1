@@ -1,8 +1,8 @@
 #pragma once
 #include "tile.h"
 
-// a tile that affects a dot's direction of travel
-// tileChars include: < > ^ v \ /
+/* a tile that affects a dot's direction of travel
+   tileChars include:     < > ^ v \ /               */
 class Flow: public Tile{
 public:
   Vec2 pos;
@@ -12,6 +12,5 @@ public:
   void add_dot(Dot *dot);
 
 private:
-  // lots of flow characters, keeps track of this one's
-  char tileChar;
+  char tileChar; // this tile's flow character
 };

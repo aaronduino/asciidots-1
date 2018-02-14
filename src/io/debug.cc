@@ -25,8 +25,7 @@ void Debug::draw(Circuit circuit){
   draw_circuit(circuit); // base layer
   decorate_circuit(circuit); // colour
 
-  // update circuit window
-  wrefresh(wcircuit);
+  wrefresh(wcircuit); // update circuit window
 
   draw_output();
   wrefresh(woutput);
@@ -37,8 +36,7 @@ void Debug::draw_circuit(Circuit circuit){
   for(uint32_t y = 0; y < circuit.height; y++){
     for(uint32_t x = 0; x < circuit.width; x++){
       // load tile, move and draw it
-      char tile = circuit.get_tile(y, x);
-      mvwaddch(wcircuit, y, x, tile);
+      mvwaddch(wcircuit, y, x, circuit.get_tile(y, x));
     }
   }
 }
@@ -49,13 +47,13 @@ void Debug::decorate_circuit(Circuit circuit){
     int y, x; // pull dot's position for convenience
     y = circuit.dots[i]->pos.y; x = circuit.dots[i]->pos.x;
 
-    char tile = circuit.get_tile(y, x); // find tile
     // replace the tile but with colour
-    mvwaddch(wcircuit, y, x, tile | COLOR_PAIR(1));
+    mvwaddch(wcircuit, y, x, circuit.get_tile(y, x) | COLOR_PAIR(1));
   }
 }
 
 void Debug::draw_output(){
+  // write in some lines from the output buffer
   for(uint32_t i = 0; i < get_output().size(); i++){
     mvwaddstr(woutput, i, 0, get_output()[i].c_str());
   }

@@ -7,6 +7,6 @@ public:
   Vec2 pos;
 
   Clone(const Vec2 &pos);
-
+  
   void add_dot(Dot *dot);
 };
