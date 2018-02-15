@@ -1,27 +1,36 @@
 #include "debug.h"
 #include <ncurses.h>
+#include <iostream>
 #include "../logic/circuit.h"
 #include "io.h"
 
-Debug::Debug(){
+// windows
+WINDOW *wcircuit;
+WINDOW *woutput;
+
+void draw_circuit(const Circuit &circuit);
+void decorate_circuit(const Circuit &circuit);
+void draw_output();
+
+void Debug::init_debug(){
   initscr();
   curs_set(0); // hide cursor
 
   // windows
   wcircuit = newwin(6, 25, 0, 0);
-  woutput = newwin(10, 25, 6, 0);
+  woutput = newwin(6, 25, 0, 0);
 
   // colours
   start_color();
   init_pair(1, COLOR_RED, COLOR_BLACK); // dots
 }
 
-Debug::~Debug(){
+void Debug::end_debug(){
   curs_set(1); // bring cursor back
   endwin(); // clean up ncurses
 }
 
-void Debug::draw(Circuit circuit){
+void Debug::draw(const Circuit &circuit){
   draw_circuit(circuit); // base layer
   decorate_circuit(circuit); // colour
 
@@ -31,7 +40,7 @@ void Debug::draw(Circuit circuit){
   wrefresh(woutput);
 }
 
-void Debug::draw_circuit(Circuit circuit){
+void draw_circuit(const Circuit &circuit){
   // iterate all tiles
   for(uint32_t y = 0; y < circuit.height; y++){
     for(uint32_t x = 0; x < circuit.width; x++){
@@ -41,7 +50,7 @@ void Debug::draw_circuit(Circuit circuit){
   }
 }
 
-void Debug::decorate_circuit(Circuit circuit){
+void decorate_circuit(const Circuit &circuit){
   // iterate dots
   for(uint32_t i = 0; i < circuit.dots.size(); i++){
     int y, x; // pull dot's position for convenience
@@ -52,7 +61,7 @@ void Debug::decorate_circuit(Circuit circuit){
   }
 }
 
-void Debug::draw_output(){
+void draw_output(){
   // write in some lines from the output buffer
   for(uint32_t i = 0; i < get_output().size(); i++){
     mvwaddstr(woutput, i, 0, get_output()[i].c_str());

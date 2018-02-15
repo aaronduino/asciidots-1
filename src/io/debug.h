@@ -1,22 +1,11 @@
 #pragma once
 
-// forward decs
+// forward dec
 class Circuit;
-typedef struct _win_st WINDOW;
 
-class Debug{
-public:
-  Debug();
-  ~Debug();
+namespace Debug{
+  void init_debug();
+  void end_debug();
 
-  void draw(Circuit circuit); // draw all debug windows
-
-private:
-  // windows
-  WINDOW *wcircuit;
-  WINDOW *woutput;
-
-  void draw_circuit(Circuit circuit); // draw the circuit (no colour)
-  void decorate_circuit(Circuit circuit); // colour interesting features  
-  void draw_output(); // draw the output window
-};
+  void draw(const Circuit &circuit); // draw all debug windows
+}

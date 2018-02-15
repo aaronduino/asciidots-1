@@ -13,7 +13,7 @@ public:
   std::vector<Tile*> tiles; // tiles that actually do things
 
   void load_circuit(const std::string &path); // load circuit from file
-  char get_tile(const int64_t &y, const int64_t &x);
+  char get_tile(const int64_t &y, const int64_t &x) const;
   bool valid_travel(const char &tile, const Vec2 &dir); // can enter tile in dir
   void spawn_dot(const uint32_t &y, const uint32_t &x);
   void parse_body(); // scan the body for interesting tiles, create objects

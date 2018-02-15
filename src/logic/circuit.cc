@@ -31,7 +31,7 @@ void Circuit::load_circuit(const std::string &path){
   parse_body(); // init body
 }
 
-char Circuit::get_tile(const int64_t &y, const int64_t &x){
+char Circuit::get_tile(const int64_t &y, const int64_t &x) const{
   std::string row = body[y];
 
   // if out of bounds, return ' '
