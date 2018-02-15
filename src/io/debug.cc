@@ -16,9 +16,12 @@ void Debug::init_debug(){
   initscr();
   curs_set(0); // hide cursor
 
+  int y, x;
+  getmaxyx(stdscr, y, x);
+
   // windows
-  wcircuit = newwin(6, 25, 0, 0);
-  woutput = newwin(6, 25, 0, 0);
+  wcircuit = newwin(y-10, x, 0, 0);
+  woutput = newwin(9, x, y-9, 0);
 
   // colours
   start_color();
@@ -37,7 +40,12 @@ void Debug::draw(const Circuit &circuit){
   wrefresh(wcircuit); // update circuit window
 
   draw_output();
+
   wrefresh(woutput);
+
+  move(wcircuit->_maxy+1, 0);
+  hline('-', wcircuit->_maxx+1);
+  refresh();
 }
 
 void draw_circuit(const Circuit &circuit){
