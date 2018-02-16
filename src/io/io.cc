@@ -1,11 +1,6 @@
 #include "io.h"
-
-std::vector<std::string> outputBuffer;
+#include "debug.h"
 
 void output(const std::string &text){
-  outputBuffer.push_back(text);
-}
-
-std::vector<std::string> get_output(){
-  return outputBuffer;
+  Debug::output(text);
 }

@@ -1,12 +1,14 @@
 #include "debug.h"
 #include <ncurses.h>
 #include <iostream>
+#include <vector>
 #include "../logic/circuit.h"
-#include "io.h"
 
 // windows
 WINDOW *wcircuit;
 WINDOW *woutput;
+
+std::vector<std::string> outputBuffer;
 
 void draw_circuit(const Circuit&);
 void decorate_circuit(const Circuit&);
@@ -47,6 +49,10 @@ void Debug::draw(const Circuit &circuit){
   wrefresh(woutput);
 }
 
+void Debug::output(const std::string &text){
+  outputBuffer.push_back(text);
+}
+
 void draw_circuit(const Circuit &circuit){
   // iterate all tiles
   for(uint32_t y = 0; y < circuit.height; y++){
@@ -70,8 +76,8 @@ void decorate_circuit(const Circuit &circuit){
 
 void draw_output(){
   // write in some lines from the output buffer
-  for(uint32_t i = 0; i < get_output().size(); i++){
-    mvwaddstr(woutput, i+1, 1, get_output()[i].c_str());
+  for(uint32_t i = 0; i < outputBuffer.size(); i++){
+    mvwaddstr(woutput, i+1, 1, outputBuffer[i].c_str());
   }
 }
 
