@@ -6,3 +6,4 @@
 
 void output(const std::string&);
 void set_mode(const int&); // set the IO mode
+int get_mode();

@@ -11,16 +11,20 @@ int main(int argc, char **argv){
   Circuit circuit;
   circuit.load_circuit(argv[1]);
 
-  Debug::init_debug();
   set_mode(MODE_DEBUG);
 
+  if(get_mode() == MODE_DEBUG)
+    Debug::init_debug();
+
   while(circuit.step()){ // loop until circuit reports stability
-    Debug::draw(circuit); // draw circuit
+    if(get_mode() == MODE_DEBUG)
+      Debug::draw(circuit); // draw circuit
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100)); // wait a bit
   }
 
-  Debug::end_debug();
+  if(get_mode() == MODE_DEBUG)
+    Debug::end_debug();
 
   return EXIT_SUCCESS;
 }
