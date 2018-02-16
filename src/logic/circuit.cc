@@ -119,10 +119,14 @@ void Circuit::parse_body(){
 }
 
 bool Circuit::step(){
+  bool activity = false;
+
   for(uint32_t i = 0; i < dots.size(); i++){ // step each dot
     // don't step disabled or skip dots
     if(dots[i]->state == STATE_DISABLED || dots[i]->state == STATE_SKIP)
       continue;
+
+    activity = true;
 
     dots[i]->move(); // move the dot forward
 
@@ -149,7 +153,7 @@ bool Circuit::step(){
 
   post_step(); // post step processing
 
-  return true; // activity occurred this step TODO: don't fake this
+  return activity;
 }
 
 void Circuit::post_step(){
