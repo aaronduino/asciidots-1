@@ -12,6 +12,7 @@ int main(int argc, char **argv){
   circuit.load_circuit(argv[1]);
 
   Debug::init_debug();
+  set_mode(MODE_DEBUG);
 
   while(circuit.step()){ // loop until circuit reports stability
     Debug::draw(circuit); // draw circuit
