@@ -2,7 +2,6 @@
 #include <ncurses.h>
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #include "../logic/circuit.h"
 
 // windows

@@ -2,12 +2,7 @@
 #include <fstream>
 #include <set>
 #include "../io/io.h"
-#include "tiles/flow.h"
-#include "tiles/clone.h"
-#include "tiles/read.h"
-#include "tiles/write.h"
-#include "tiles/operator.h"
-#include "tiles/branch.h"
+#include "tiles/tiles.h"
 
 void Circuit::load_circuit(const std::string &path){
   body = std::vector<std::string>(); // clear body
