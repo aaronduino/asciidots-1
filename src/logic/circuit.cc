@@ -151,8 +151,6 @@ bool Circuit::step(){
     }
   }
 
-  post_step(); // post step processing
-
   return activity;
 }
 
@@ -177,6 +175,11 @@ void Circuit::post_step(){
 
     else if(dots[i]->state == STATE_SKIP) // remove skip states
       dots[i]->state = STATE_NONE; // they're only effective within their step
+
+    else if(dots[i]->state == STATE_INPUT){
+      dots[i]->value = input();
+      dots[i]->state = STATE_NONE;
+    }
   }
 }
 
@@ -210,7 +213,7 @@ void Circuit::process_io(Dot *dot, const char &tile){
       }
     }
     else if(tile == '?')
-      dot->value = input();
+      dot->state = STATE_INPUT;
     else // tile not a digit, disable any reading modes
       dot->state = STATE_NONE;
   }

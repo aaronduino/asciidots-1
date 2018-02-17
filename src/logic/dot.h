@@ -12,6 +12,7 @@
 #define STATE_DEAD      7
 #define STATE_SKIP      8
 #define STATE_CLONE     9
+#define STATE_INPUT     10
 
 class Dot{
 public:
