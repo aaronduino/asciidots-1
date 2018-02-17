@@ -37,6 +37,9 @@ void Debug::init_debug(){
   // colours
   start_color();
   init_pair(1, COLOR_RED, COLOR_BLACK); // dots
+  init_pair(2, COLOR_CYAN, COLOR_BLACK); // ops, branches
+  init_pair(3, COLOR_MAGENTA, COLOR_BLACK); // *
+  init_pair(4, COLOR_BLUE, COLOR_BLACK); // #, @, $
 }
 
 void Debug::end_debug(){
@@ -76,14 +79,42 @@ void draw_circuit(const Circuit &circuit){
 }
 
 void decorate_circuit(const Circuit &circuit){
-  // iterate dots
+  // colour special tiles
+  for(uint32_t i = 0; i < circuit.tiles.size(); i++){
+    int y, x;
+    y = circuit.tiles[i]->pos.y; x = circuit.tiles[i]->pos.x;
+
+    switch(circuit.tiles[i]->get_type()){
+      case TILE_BRANCH:
+        mvwaddch(wcircuit, y+1, x+1, circuit.get_tile(y, x) | COLOR_PAIR(2));
+        break;
+      case TILE_CLONE:
+        mvwaddch(wcircuit, y+1, x+1, circuit.get_tile(y, x) | COLOR_PAIR(3));      
+        break;
+      case TILE_OPERATOR:
+        mvwaddch(wcircuit, y+1, x+1, circuit.get_tile(y, x) | COLOR_PAIR(2));        
+        break;
+      case TILE_READ:
+        mvwaddch(wcircuit, y+1, x+1, circuit.get_tile(y, x) | COLOR_PAIR(4));      
+        break;
+      case TILE_WRITE:
+        mvwaddch(wcircuit, y+1, x+1, circuit.get_tile(y, x) | COLOR_PAIR(4));      
+        break;
+    }
+  }
+
+  // highlight dots
+  wattr_on(wcircuit, COLOR_PAIR(1) | A_BOLD, 0);
+
   for(uint32_t i = 0; i < circuit.dots.size(); i++){
     int y, x; // pull dot's position for convenience
     y = circuit.dots[i]->pos.y; x = circuit.dots[i]->pos.x;
 
     // replace the tile but with colour
-    mvwaddch(wcircuit, y+1, x+1, circuit.get_tile(y, x) | COLOR_PAIR(1));
+    mvwaddch(wcircuit, y+1, x+1, circuit.get_tile(y, x));
   }
+
+  wattrset(wcircuit, A_NORMAL);
 }
 
 void draw_output(){

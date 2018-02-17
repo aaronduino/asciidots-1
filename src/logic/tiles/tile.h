@@ -1,6 +1,13 @@
 #pragma once
 #include "../../vec2.h"
 
+#define TILE_BRANCH   0
+#define TILE_CLONE    1
+#define TILE_FLOW     2
+#define TILE_OPERATOR 3
+#define TILE_READ     4
+#define TILE_WRITE    5
+
 // forward dec
 class Dot;
 
@@ -9,11 +16,10 @@ class Dot;
    tiles remember their local position for testing arrival */
 class Tile{
 public:
-  // local position of this tile within its circuit
-  Vec2 pos;
+  Vec2 pos; // local position of this tile within its circuit
 
-  // ensure pos is always set at construction
-  Tile(const Vec2 &p) : pos(p) {}
+  Tile(const Vec2 &p) : pos(p) {} // pos must be set in constructor
 
   virtual void add_dot(Dot *dot) = 0;
+  virtual int get_type() = 0; // tiles must report their type
 };

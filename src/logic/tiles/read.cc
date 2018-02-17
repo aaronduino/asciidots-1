@@ -13,3 +13,7 @@ void Read::add_dot(Dot *dot){
       dot->state = STATE_AT;
   }
 }
+
+int Read::get_type(){
+  return TILE_READ;
+}

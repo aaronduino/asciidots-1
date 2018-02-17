@@ -35,3 +35,7 @@ void Flow::add_dot(Dot *dot){
       break;
   }
 }
+
+int Flow::get_type(){
+  return TILE_FLOW;
+}

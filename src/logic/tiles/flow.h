@@ -10,6 +10,7 @@ public:
   Flow(const Vec2 &pos, const char &tileChar);
 
   void add_dot(Dot *dot);
+  int get_type();
 
 private:
   char tileChar; // this tile's flow character

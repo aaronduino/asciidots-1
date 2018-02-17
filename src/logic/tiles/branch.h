@@ -13,6 +13,7 @@ public:
   Branch(const Vec2 &pos);
 
   void add_dot(Dot *dot);
+  int get_type();
 
 private:
   std::queue<Dot*> primary; // always horizontal

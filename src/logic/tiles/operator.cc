@@ -29,6 +29,10 @@ void Operator::add_dot(Dot *dot){
   }
 }
 
+int Operator::get_type(){
+	return TILE_OPERATOR;
+}
+
 int Operator::operate(const int &lhs, const int &rhs){
 	switch(opChar){
 		case '+':

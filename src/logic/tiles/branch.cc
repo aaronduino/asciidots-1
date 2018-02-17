@@ -25,3 +25,7 @@ void Branch::add_dot(Dot *dot){
     secondary.pop();
   }
 }
+
+int Branch::get_type(){
+  return TILE_BRANCH;
+}

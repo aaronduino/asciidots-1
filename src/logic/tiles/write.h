@@ -9,4 +9,5 @@ public:
   Write(const Vec2 &pos);
 
   void add_dot(Dot *dot);
+  int get_type();
 };

@@ -16,6 +16,7 @@ public:
   Operator(const Vec2 &pos, const char &opChar, const bool &vertical);
 
   void add_dot(Dot *dot);
+  int get_type();
 
 private:
   char opChar;
