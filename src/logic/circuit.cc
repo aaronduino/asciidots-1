@@ -3,6 +3,7 @@
 #include <set>
 #include "../io/io.h"
 #include "tiles/tiles.h"
+#include <iostream>
 
 void Circuit::load_circuit(const std::string &path){
   body = std::vector<std::string>(); // clear body
@@ -20,20 +21,21 @@ void Circuit::load_circuit(const std::string &path){
     if(line.length() > width) // use widest
       width = line.length();
   }
-
+  
   file.close();
 
   parse_body(); // init body
 }
 
-char Circuit::get_tile(const int64_t &y, const int64_t &x) const{
-  std::string row = body[y];
-
-  // if out of bounds, return ' '
-  if(x >= (int64_t)row.length() || x < 0 || y >= (int64_t)height || y < 0)
+char Circuit::get_tile(const int32_t &y, const int32_t &x) const{
+  if(y >= (int32_t)height || y < 0) // vertically out of bounds, return blank
     return ' ';
-  else
-    return row[x];
+
+  std::string row = body[y]; // pull the row, horizontal bounds vary
+  if(x >= (int32_t)row.length() || x < 0) // horizontally out of bounds
+    return ' ';
+
+  return row[x]; // within bounds, return the actual character
 }
 
 // assumes legal travel, returns false if illegal
@@ -80,8 +82,9 @@ void Circuit::parse_body(){
     char tile = get_tile(y, x); // convenience
     Vec2 pos(x, y);
 
-    if(tile == '.') // spawns
+    if(tile == '.'){ // spawns
       spawn_dot(y, x);
+    }
 
     else if(
       get_tile(y, x-1) == '{' && // horizontal operators

@@ -13,7 +13,7 @@ public:
   std::vector<Tile*> tiles; // tiles that actually do things
 
   void load_circuit(const std::string &path); // load circuit from file
-  char get_tile(const int64_t &y, const int64_t &x) const;
+  char get_tile(const int32_t &y, const int32_t &x) const;
   bool step(); // move all dots, process all interesting tiles
   void collect_inputs();
 
