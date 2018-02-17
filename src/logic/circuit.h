@@ -15,7 +15,7 @@ public:
   void load_circuit(const std::string &path); // load circuit from file
   char get_tile(const int64_t &y, const int64_t &x) const;
   bool step(); // move all dots, process all interesting tiles
-  void post_step(); // handle business after every dot has stepped
+  void collect_inputs();
 
 private:
   std::vector<std::string> body; // payload of the circuit file
@@ -24,4 +24,5 @@ private:
   void spawn_dot(const uint32_t &y, const uint32_t &x);
   void parse_body(); // scan the body for interesting tiles, create objects
   void process_io(Dot *dot, const char &tile); // handle any reading/writing
+  void post_step(); // handle business after every dot has stepped  
 };

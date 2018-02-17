@@ -151,6 +151,8 @@ bool Circuit::step(){
     }
   }
 
+  post_step(); // perform post-step cleanups
+
   return activity;
 }
 
@@ -175,8 +177,12 @@ void Circuit::post_step(){
 
     else if(dots[i]->state == STATE_SKIP) // remove skip states
       dots[i]->state = STATE_NONE; // they're only effective within their step
+  }
+}
 
-    else if(dots[i]->state == STATE_INPUT){
+void Circuit::collect_inputs(){
+  for(uint32_t i = 0; i < dots.size(); i++){
+    if(dots[i]->state == STATE_INPUT){
       dots[i]->value = input();
       dots[i]->state = STATE_NONE;
     }

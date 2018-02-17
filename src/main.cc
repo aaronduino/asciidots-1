@@ -20,7 +20,7 @@ int main(int argc, char **argv){
     if(get_mode() == MODE_DEBUG)
       Debug::draw(circuit); // draw circuit
 
-    circuit.post_step();
+    circuit.collect_inputs();
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100)); // wait a bit
   }
