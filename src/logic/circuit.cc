@@ -209,6 +209,8 @@ void Circuit::process_io(Dot *dot, const char &tile){
         dot->id += tile - '0';
       }
     }
+    else if(tile == '?')
+      dot->value = input();
     else // tile not a digit, disable any reading modes
       dot->state = STATE_NONE;
   }

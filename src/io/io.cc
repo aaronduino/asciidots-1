@@ -4,6 +4,15 @@
 
 int mode; // io interface, either stdio or the debugger
 
+int input(){
+  if(mode == MODE_STDIO){
+    std::string raw;
+    getline(std::cin, raw);
+    return stoi(raw);
+  }
+  else return 0;
+}
+
 void output(const std::string &text){
   if(mode == MODE_STDIO)
     std::cout << text << std::endl;

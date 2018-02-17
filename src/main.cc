@@ -11,7 +11,7 @@ int main(int argc, char **argv){
   Circuit circuit;
   circuit.load_circuit(argv[1]);
 
-  set_mode(MODE_DEBUG);
+  set_mode(MODE_STDIO);
 
   if(get_mode() == MODE_DEBUG)
     Debug::init_debug();
