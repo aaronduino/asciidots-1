@@ -7,6 +7,7 @@
 // windows
 WINDOW *wcircuit;
 WINDOW *woutput;
+WINDOW *winput;
 
 std::vector<std::string> outputBuffer;
 
@@ -21,12 +22,17 @@ void Debug::init_debug(){
 
   uint32_t outputLines = 5;
 
-  int height, width; // stdscr bounds
-  getmaxyx(stdscr, height, width);
+  int tHeight, tWidth; // total bounds
+  getmaxyx(stdscr, tHeight, tWidth);
+
+  int iHeight = 1; // input window height
+  int oHeight = outputLines + 2; // output window height
+  int cHeight = tHeight - oHeight - iHeight;
 
   // windows
-  wcircuit = newwin(height - outputLines - 2, width, 0, 0);
-  woutput = newwin(outputLines+2, width, height - outputLines - 2, 0);
+  wcircuit = newwin(cHeight, tWidth, 0, 0);
+  woutput = newwin(oHeight, tWidth, cHeight, 0);
+  winput = newwin(iHeight, tWidth, cHeight + oHeight, 0);
 
   // colours
   start_color();
@@ -49,6 +55,12 @@ void Debug::draw(const Circuit &circuit){
   wrefresh(woutput);
 }
 
+int Debug::input(){
+  mvwaddstr(winput, 0, 0, "?> ");
+  char* raw = new char;
+  wgetstr(winput, raw);
+  return atoi(raw);
+}
 void Debug::output(const std::string &text){
   outputBuffer.push_back(text);
 }

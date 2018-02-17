@@ -10,7 +10,7 @@ int input(){
     getline(std::cin, raw);
     return stoi(raw);
   }
-  else return 0;
+  else return Debug::input();
 }
 
 void output(const std::string &text){
