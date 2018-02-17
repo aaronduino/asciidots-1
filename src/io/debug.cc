@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "../logic/circuit.h"
 
 // windows
@@ -10,6 +11,7 @@ WINDOW *woutput;
 WINDOW *winput;
 
 std::vector<std::string> outputBuffer;
+uint32_t outputLines;
 
 void draw_circuit(const Circuit&);
 void decorate_circuit(const Circuit&);
@@ -20,7 +22,7 @@ void Debug::init_debug(){
   initscr();
   curs_set(0); // hide cursor
 
-  uint32_t outputLines = 5;
+  outputLines = 5;
 
   int tHeight, tWidth; // total bounds
   getmaxyx(stdscr, tHeight, tWidth);
@@ -118,9 +120,12 @@ void decorate_circuit(const Circuit &circuit){
 }
 
 void draw_output(){
+  int j = (int)outputBuffer.size() - (int)outputLines; // top line index
+  if(j < 0) j = 0; // clamp to 0
+
   // write in some lines from the output buffer
-  for(uint32_t i = 0; i < outputBuffer.size(); i++){
-    mvwaddstr(woutput, i+1, 1, outputBuffer[i].c_str());
+  for(uint32_t i = 0; i < outputBuffer.size(); i++){ 
+    mvwaddstr(woutput, i+1, 1, outputBuffer[j+i].c_str());
   }
 }
 
