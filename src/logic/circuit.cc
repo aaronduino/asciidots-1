@@ -138,16 +138,19 @@ bool Circuit::step(){
     if(dots[i]->state == STATE_READVALUE || dots[i]->state == STATE_READID)
       continue;
 
-    if(tile == ' ' || !valid_travel(tile, dots[i]->dir)){ // check for deaths
-      dots[i]->state = STATE_DEAD;
-      continue;
-    }
-
     // find an active tile at this position TODO: improve this search
+    bool handled = false;
     for(uint32_t j = 0; j < tiles.size(); j++){
-      if(tiles[j]->pos == dots[i]->pos)
+      if(tiles[j]->pos == dots[i]->pos){
         tiles[j]->add_dot(dots[i]); // pass the dot to the tile here
+        handled = true;
+        break;
+      }
     }
+    if(handled) continue;
+
+    if(tile == ' ' || !valid_travel(tile, dots[i]->dir)) // check for deaths
+      dots[i]->state = STATE_DEAD;
   }
 
   post_step(); // perform post-step cleanups
