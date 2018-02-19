@@ -229,5 +229,7 @@ void Circuit::process_io(Dot *dot, const char &tile){
       output(std::to_string(dot->value));
     else if(tile == '@')
       output(std::to_string(dot->id));
+
+    dot->state = STATE_NONE;
   }
 }
