@@ -51,7 +51,8 @@ bool Circuit::valid_travel(const char &tile, const Vec2 &dir){
 }
 
 void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
-  // find a direction for the spawned dot to point
+  /* find a direction for the spawned dot to point
+     if multiple possible exits, use first in clock order */
   Vec2 compass[4] = { Vec2(0, -1), Vec2(1, 0), Vec2(0, 1), Vec2(-1, 0) };
   std::vector<Vec2> exits;
   for(int i = 0; i < 4; i++){
@@ -61,15 +62,15 @@ void Circuit::spawn_dot(const uint32_t &y, const uint32_t &x){
 
     char tile = get_tile(y + compass[i].y, x + compass[i].x);
 
-    if(tile == ' ') // empty space isn't an exit
+    if(tile == ' ' || tile == '.') // empty space isn't an exit
       continue;
 
     if(valid_travel(tile, compass[i])) // if we can legally leave this way
       exits.push_back(compass[i]); // it's an exit
   }
 
-  if(exits.size() == 1) // must only be one unambiguous exit
-    dots.push_back(new Dot(Vec2(x, y), exits[0])); // spawn dot pointing there
+  if(exits.size() > 0) // gotta be at least one exit
+    dots.push_back(new Dot(Vec2(x, y), exits[0]));
 }
 
 void Circuit::parse_body(){
