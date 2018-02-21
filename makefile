@@ -2,7 +2,7 @@
 CC = g++
 EXE = dots
 # compiler args
-COMPARGS = -Wall -Wextra
+COMPARGS = -Wall -Wextra -std=gnu++11
 LINKARGS = -lncurses
 # directories
 SRC = src
